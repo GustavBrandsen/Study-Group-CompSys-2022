@@ -1,8 +1,8 @@
 my_ip: 127.0.0.1
-my_port: 23456
+my_port: 23450
 
-#peer_ip: 127.0.0.1
-#peer_port: 12345
+peer_ip: 127.0.0.1
+peer_port: 12345
 
 # These options can be used to connect to the remote server
 #peer_ip: 130.225.104.138
