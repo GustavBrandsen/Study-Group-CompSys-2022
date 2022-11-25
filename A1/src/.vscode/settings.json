@@ -1,0 +1,12 @@
+{
+    "C_Cpp.errorSquiggles": "Disabled",
+    "files.associations": {
+        "algorithm": "c",
+        "__tuple": "c",
+        "array": "c",
+        "stdio.h": "c",
+        "time.h": "c",
+        "string": "c",
+        "iosfwd": "c"
+    }
+}
