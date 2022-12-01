@@ -327,15 +327,31 @@ void send_message(PeerAddress_t peer_address, int command, char *request_body) {
     {
         if (command == COMMAND_REGISTER)
         {
-            uint32_t reply_count = sizeof(reply_body) / sizeof(int);
-            uint32_t network_count = sizeof(network) / sizeof(int);
+            // Your code here. This code has been added as a guide, but feel 
+            // free to add more, or work in other parts of the code
+            uint32_t reply_count = (uint32_t)(reply_length / 20);
 
             for (uint32_t i = 0; i < reply_count; i++)
             {
+                PeerAddress_t *reply_address = (PeerAddress_t *)malloc(sizeof(PeerAddress_t));
+                memset(reply_address->ip, '\0', IP_LEN);
+                memset(reply_address->port, '\0', PORT_LEN);
+                memcpy(reply_address->ip, reply_body + i * 20, IP_LEN);
+                memcpy(reply_address->port, reply_body + i * 20 + 16, PORT_LEN);
+
+                char *curr_ip = reply_address->ip;
+                int curr_port_temp = ntohl(*(uint32_t *)&reply_address->port);
+                char curr_port[PORT_LEN];
+                sprintf(curr_port, "%d", curr_port_temp);
+
+                memcpy(reply_address->port, curr_port, PORT_LEN);
+
+                printf("reply ip: %s, reply port: %s \n", curr_ip, curr_port);
+
                 int in_network = 0;
-                for (uint32_t j = 0; j < network_count; j++)
+                for (uint32_t j = 0; j < peer_count; j++)
                 {
-                    if ((PeerAddress_t *)reply_body[i] == network[j])
+                    if (strcmp(reply_address->ip, network[j]->ip) == 0 && strcmp(reply_address->port, network[j]->port) == 0)
                     {
                         printf("IP already registered\n");
                         in_network = 1;
@@ -344,25 +360,22 @@ void send_message(PeerAddress_t peer_address, int command, char *request_body) {
                 }
                 if (in_network == 0)
                 {
-                    printf("New ip reg\n");
-                    network_count++;
-                    network = realloc(network, sizeof(reply_body[i]));
-                    network[network_count] = (PeerAddress_t *)reply_body[i];
+                    printf("New ip reg\n\n");
+                    network = realloc(network, sizeof(PeerAddress_t *));
+                    network[peer_count] = reply_address;
                     peer_count++;
                 }
             }
-            // Check if IP already exists in network list, if not: 
-            // Realloc and add new IP
-            // assign command = 1 if duplicate IP exists. 
-
-            // Your code here. This code has been added as a guide, but feel 
-            // free to add more, or work in other parts of the code
-            printf("Length of reply %lu\n", sizeof(reply_body) / sizeof(int));
-            printf("Length of network %lu \n", sizeof(network) / sizeof(int));
+            printf("Length of reply %lu\n", reply_count);
             printf("Peer Count of network %i \n", peer_count);
-            for (uint32_t i = 0; i < sizeof(network) / sizeof(int); i++) {
-                printf("Network IP: %s. PORT: %s \n", network[i]->ip, network[i]->port);
+
+            printf("\nNETWORK LIST: \n");
+            for (uint32_t i = 0; i < peer_count; i++)
+            {
+                printf("ip: %s, port: %s \n", network[i]->ip, network[i]->port);
             }
+            printf("\n");
+
         }
     } else
     {
