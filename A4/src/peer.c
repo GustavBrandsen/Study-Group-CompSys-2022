@@ -346,28 +346,24 @@ void send_message(PeerAddress_t peer_address, int command, char *request_body) {
 
                 memcpy(reply_address->port, curr_port, PORT_LEN);
 
-                printf("reply ip: %s, reply port: %s \n", curr_ip, curr_port);
-
                 int in_network = 0;
                 for (uint32_t j = 0; j < peer_count; j++)
                 {
                     if (strcmp(reply_address->ip, network[j]->ip) == 0 && strcmp(reply_address->port, network[j]->port) == 0)
                     {
-                        printf("IP already registered\n");
+                        printf("IP already registered\n\n");
                         in_network = 1;
                         break;
                     }
                 }
                 if (in_network == 0)
                 {
-                    printf("New ip reg\n\n");
-                    network = realloc(network, sizeof(PeerAddress_t *));
-                    network[peer_count] = reply_address;
+                    printf("IP registered\n\n");
                     peer_count++;
+                    network = realloc(network, sizeof(PeerAddress_t) * peer_count);
+                    network[peer_count - 1] = reply_address;
                 }
             }
-            printf("Length of reply %lu\n", reply_count);
-            printf("Peer Count of network %i \n", peer_count);
 
             printf("\nNETWORK LIST: \n");
             for (uint32_t i = 0; i < peer_count; i++)
@@ -424,15 +420,71 @@ void *client_thread(void *thread_args) {
 void handle_register(int connfd, char *client_ip, int client_port_int) {
     // Your code here. This function has been added as a guide, but feel free 
     // to add more, or work in other parts of the code
+
+    int in_network = 0;
+    PeerAddress_t *register_address = (PeerAddress_t *)malloc(sizeof(PeerAddress_t));
+    int curr_port_temp = ntohl(*(uint32_t *)&register_address->port);
+    char curr_port[PORT_LEN];
+    sprintf(curr_port, "%d", curr_port_temp);
+    memcpy(register_address->ip, client_ip, IP_LEN);
+    memcpy(register_address->port, curr_port_temp, PORT_LEN);
+
+    for (uint32_t j = 0; j < peer_count; j++)
+    {
+        if (strcmp(register_address->ip, network[j]->ip) == 0 && strcmp(register_address->port, network[j]->port) == 0)
+        {
+            in_network = 1;
+            break;
+        }
+    }
+    if (in_network == 0)
+    {
+        printf("IP registered\n\n");
+        peer_count++;
+        network = realloc(network, sizeof(PeerAddress_t) * peer_count);
+        network[peer_count - 1] = register_address;
+
+        // Concat ip and port as string
+        char *str_register_address = strcat(client_ip, curr_port);
+        // Inform all peers about new peer joining the network.
+        for (uint32_t i = 0; i < peer_count; i++)
+        {
+            send_message(*network[i], COMMAND_INFORM, str_register_address);
+        }
+    }
+
+
+
+
 }
 
 /*
  * Handle 'inform' type message as defined by the assignment text. These will
  * never generate a response, even in the case of errors.
  */
+ // Indsæt i network listen
 void handle_inform(char *request) {
     // Your code here. This function has been added as a guide, but feel free 
     // to add more, or work in other parts of the code
+    PeerAddress_t *retrieve_address = malloc(sizeof(PeerAddress_t));
+    memcpy(retrieve_address->ip, request, IP_LEN);
+    memcpy(retrieve_address->port, request + IP_LEN, PORT_LEN);
+
+    int in_network = 0;
+    for (uint32_t j = 0; j < peer_count; j++)
+    {
+        if (strcmp(retrieve_address->ip, network[j]->ip) == 0 && strcmp(retrieve_address->port, network[j]->port) == 0)
+        {
+            in_network = 1;
+            break;
+        }
+    }
+    if (in_network == 0)
+    {
+        peer_count++;
+        network = realloc(network, sizeof(PeerAddress_t) * peer_count);
+        network[peer_count - 1] = retrieve_address;
+    }
 }
 
 /*
@@ -442,6 +494,12 @@ void handle_inform(char *request) {
 void handle_retreive(int connfd, char *request) {
     // Your code here. This function has been added as a guide, but feel free 
     // to add more, or work in other parts of the code
+    PeerAddress_t *retrieve_address = malloc(sizeof(PeerAddress_t));
+    memcpy(retrieve_address->ip, request, IP_LEN);
+    memcpy(retrieve_address->port, request + IP_LEN, PORT_LEN);
+    char *path[MAX_MSG_LEN];
+    memcpy(path, request + IP_LEN + PORT_LEN, MAX_MSG_LEN);
+    send_message(*retrieve_address, COMMAND_RETREIVE, path);
 }
 
 /*
@@ -451,6 +509,34 @@ void handle_retreive(int connfd, char *request) {
 void handle_server_request(int connfd) {
     // Your code here. This function has been added as a guide, but feel free 
     // to add more, or work in other parts of the code
+    rio_t rio;
+    char buf[MAX_MSG_LEN];
+    rio_readnb(&rio, buf, MAX_MSG_LEN);
+
+    Request_t *request = malloc(sizeof(Request_t));
+    //RequestHeader_t *req_header = malloc(sizeof(RequestHeader_t));
+    printf("handle_server_request");
+    memcpy(request->requestHeader.ip, buf, IP_LEN);
+    memcpy(request->requestHeader.port, buf + IP_LEN, PORT_LEN);
+    memcpy(request->requestHeader.command, buf + IP_LEN + PORT_LEN, PORT_LEN);
+    memcpy(request->requestHeader.length, buf + IP_LEN + PORT_LEN + PORT_LEN, PORT_LEN);
+    memcpy(request->payload, buf + IP_LEN + PORT_LEN + PORT_LEN + PORT_LEN, MAX_MSG_LEN);
+
+    switch (request->requestHeader.command)
+    {
+        case COMMAND_REGISTER:
+            handle_register(connfd, request->requestHeader.ip, request->requestHeader.port);
+            break;
+        case COMMAND_RETREIVE:
+            handle_retreive(connfd, request);
+            break;
+        case COMMAND_INFORM:
+            handle_inform(request);
+            break;
+        default:
+            break;
+    }
+
 }
 
 /*
@@ -460,6 +546,31 @@ void handle_server_request(int connfd) {
 void *server_thread() {
     // Your code here. This function has been added as a guide, but feel free 
     // to add more, or work in other parts of the code
+    // THIS IS TAKEN FROM ECHO SERVER EXERCISE AND MODIFYED
+    printf("Starting server at: %s:%s", my_address->ip, my_address->port);
+    int listenfd, connfd;
+    socklen_t clientlen;
+    struct sockaddr_storage clientaddr;
+    char client_hostname[MAXLINE], client_port[MAXLINE];
+
+    listenfd = Open_listenfd(my_address->port);
+    while (1) {
+        clientlen = sizeof(struct sockaddr_storage);
+        connfd = Accept(listenfd, (SA *)&clientaddr, &clientlen);
+        if (Fork() == 0) {
+            Close(listenfd); /* Child closes its listening socket */
+            pid_t childpid = getpid();
+            Getnameinfo((SA *)&clientaddr, clientlen, client_hostname, MAXLINE,
+                client_port, MAXLINE, 0);
+            //printf("Connected to (%s, %s) via pid %d\n", client_hostname, client_port, childpid);
+            handle_server_request(connfd);
+            //echo(connfd);    /* Child services client */ //line:conc:echoserverp:echofun
+            Close(connfd);   /* Child closes connection with client */ //line:conc:echoserverp:childclose
+            exit(0);         /* Child exits */
+        }
+        Close(connfd); /* Parent closes connected socket (important!) */ //line:conc:echoserverp:parentclose
+    }
+
 }
 
 

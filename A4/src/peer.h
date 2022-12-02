@@ -40,3 +40,8 @@ typedef struct NetworkAddress {
     char ip[IP_LEN];
     uint32_t port;
 } NetworkAddress_t;
+
+typedef struct Request {
+    RequestHeader_t requestHeader;
+    char payload[MAX_MSG_LEN];
+} Request_t;
