@@ -409,6 +409,7 @@ void *client_thread(void *thread_args) {
 
     // Retrieve the larger file, that requires support for blocked messages
     send_message(*peer_address, COMMAND_RETREIVE, "hamlet.txt");
+    send_message(*peer_address, COMMAND_RETREIVE, "test.txt");
 
     return NULL;
 }
@@ -547,7 +548,7 @@ void *server_thread() {
     // Your code here. This function has been added as a guide, but feel free 
     // to add more, or work in other parts of the code
     // THIS IS TAKEN FROM ECHO SERVER EXERCISE AND MODIFYED
-    printf("Starting server at: %s:%s", my_address->ip, my_address->port);
+    printf("Starting server at: %s:%s \n", my_address->ip, my_address->port);
     int listenfd, connfd;
     socklen_t clientlen;
     struct sockaddr_storage clientaddr;
