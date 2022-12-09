@@ -50,8 +50,7 @@ int main(int argc, char *argv[])
     {
       fprintf(log_file, "\nSimulated %ld instructions in %d ticks (%f MIPS)\n", num_insns, ticks, mips);
       fclose(log_file);
-    }
-    else
+    } else
     {
       printf("\nSimulated %ld instructions in %d ticks (%f MIPS)\n", num_insns, ticks, mips);
     }
