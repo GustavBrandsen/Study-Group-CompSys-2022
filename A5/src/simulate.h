@@ -63,7 +63,7 @@
 #define SRL 0
 #define SRA 32
 #define OR 6
-#define AND 7
+#define AND 0
 
 
 #define ADDW 0
@@ -80,7 +80,8 @@
 #define BLTU 6
 #define BGEU 7
 
-
+// MUL IMPLEMENTATION
+#define REMU 1
 
 // Simuler RISC-V program i givet lager og fra given start adresse
 long int simulate(struct memory *mem, struct assembly *as, int start_addr, FILE *log_file);

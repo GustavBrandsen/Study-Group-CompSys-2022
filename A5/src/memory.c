@@ -64,18 +64,18 @@ void memory_wr_b(struct memory *mem, int addr, int data)
   int index = (addr >> 2) & 0x3fff;
   switch (addr & 0x3)
   {
-  case 0:
-    page[index] = (page[index] & 0xffffff00) | (data & 0xff);
-    break;
-  case 1:
-    page[index] = (page[index] & 0xffff00ff) | ((data & 0xff) << 8);
-    break;
-  case 2:
-    page[index] = (page[index] & 0xff00ffff) | ((data & 0xff) << 16);
-    break;
-  case 3:
-    page[index] = (page[index] & 0x00ffffff) | ((data & 0xff) << 24);
-    break;
+    case 0:
+      page[index] = (page[index] & 0xffffff00) | (data & 0xff);
+      break;
+    case 1:
+      page[index] = (page[index] & 0xffff00ff) | ((data & 0xff) << 8);
+      break;
+    case 2:
+      page[index] = (page[index] & 0xff00ffff) | ((data & 0xff) << 16);
+      break;
+    case 3:
+      page[index] = (page[index] & 0x00ffffff) | ((data & 0xff) << 24);
+      break;
   }
 }
 
@@ -111,18 +111,18 @@ int memory_rd_b(struct memory *mem, int addr)
   int index = (addr >> 2) & 0x3fff;
   switch (addr & 0x3)
   {
-  case 0:
-    return page[index] & 0xff;
-    break;
-  case 1:
-    return (page[index] >> 8) & 0xff;
-    break;
-  case 2:
-    return (page[index] >> 16) & 0xff;
-    break;
-  case 3:
-    return (page[index] >> 24) & 0xff;
-    break;
+    case 0:
+      return page[index] & 0xff;
+      break;
+    case 1:
+      return (page[index] >> 8) & 0xff;
+      break;
+    case 2:
+      return (page[index] >> 16) & 0xff;
+      break;
+    case 3:
+      return (page[index] >> 24) & 0xff;
+      break;
   }
   return 0; // silence a warning
 }
