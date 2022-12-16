@@ -24,9 +24,9 @@ long int simulate(struct memory *mem, struct assembly *as, int start_addr, FILE 
 
     int insn = memory_rd_w(mem, pc);
 
-    int forl = 0;
-    while (forl < 200) {
-        forl += 1;
+    int i = 0;
+    while (i < 200) {
+        i += 1;
         // We get the instruction(insn)
         insn = memory_rd_w(mem, pc);
         // printf("insn: %d \n", memory_rd_w(mem, pc));
