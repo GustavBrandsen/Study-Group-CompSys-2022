@@ -7,7 +7,7 @@
 
 long int simulate(struct memory *mem, struct assembly *as, int start_addr, FILE *log_file)
 {
-    int pc = start_addr;
+    int pc = start_addr - 4;
     int r[32] = { 0 };
     long int num_insns = 0;
 
@@ -25,12 +25,14 @@ long int simulate(struct memory *mem, struct assembly *as, int start_addr, FILE 
     int insn = memory_rd_w(mem, pc);
 
     int i = 0;
-    while (i < 200) {
+    while (i < 30) {
+        pc = pc + 4;
+        printf("\nSTART PC : %x\n", pc);
         i += 1;
         // We get the instruction(insn)
         insn = memory_rd_w(mem, pc);
         // printf("insn: %d \n", memory_rd_w(mem, pc));
-        pc = pc + 4; // We increment the pointer as we start at "_start"
+
 
         // We want to decode the instruction (insn) to variables
         int opcode = insn & 127; // Max 127 int
@@ -49,25 +51,28 @@ long int simulate(struct memory *mem, struct assembly *as, int start_addr, FILE 
                     {
                         case LB:
                             // check if address is within bounds of memory array
-                            r[rd] = memory_rd_b(mem, r[rs1] + imm);
+                            printf("LB\n");
+                            r[rd] = 0b00000000000000000000000000000000 | memory_rd_b(mem, r[rs1] + imm);
                             break;
 
                         case LH:
-                            r[rd] = memory_rd_h(mem, r[rs1] + imm);
+                            printf("LH\n");
+                            r[rd] = 0b00000000000000000000000000000000 | memory_rd_h(mem, r[rs1] + imm);
                             break;
 
                         case LW:
+                            printf("LW\n");
                             r[rd] = memory_rd_w(mem, r[rs1] + imm);
                             break;
 
                         case LBU:
                             printf("LBU\n");
-                            r[rd] = (unsigned char)(r[rs1] + imm);
+                            r[rd] = 0b00000000000000000000000000000000 | memory_rd_b(mem, r[rs1] + imm);
                             break;
 
                         case LHU:
                             printf("LHU\n");
-                            r[rd] = (unsigned short)(r[rs1] + imm);
+                            r[rd] = 0b00000000000000000000000000000000 | memory_rd_h(mem, r[rs1] + imm);
                             break;
 
                         default:
@@ -138,9 +143,13 @@ long int simulate(struct memory *mem, struct assembly *as, int start_addr, FILE 
 
                 case FMT_I103: // JALR 
                     printf("JALR\n");
-                    r[rd] = r[rs1] - 4;
-                    //r[rd] = pc + 4;
-                    //pc = (r[rs1] + imm) & 0;
+                    r[rd] = pc + 4;
+                    pc = (r[rs1] + imm) - 4;
+                    //r[rd] = r[rs1] - 4;
+                    printf("PC: %d \n", pc);
+                    printf("r[rs1]: %d\n", r[rs1]);
+                    printf("r[rs2]: %d\n", r[rs2]);
+                    printf("IMM: %d\n", imm);
                     break;
 
                 case FMT_I115:
@@ -329,13 +338,16 @@ long int simulate(struct memory *mem, struct assembly *as, int start_addr, FILE 
             funct3 = (insn >> 12) & 7; // Start from 12th bit, max 7 int
             rs1 = (insn >> 15) & 31; // Start from 15th bit, max 31 int
             rs2 = (insn >> 20) & 31; // Start from 20th bit, max 31 int
-
-            // 
-            imm1 = (insn >> 7) & 31; // Start from 7th bit, max 31 int
-            imm2 = (insn >> 25) & 63; // Start from 20th bit, max 4095 int
-            imm3;
-            imm4;
-            imm = (imm1 << 5) | imm2;
+            // imm1 = (insn >> 7) & 31; // Start from 7th bit, max 31 int
+            // imm2 = (insn >> 25) & 63; // Start from 20th bit, max 4095 int
+            imm1 = (insn >> 7) & 1;
+            imm2 = (insn >> 8) & 15;
+            imm3 = (insn >> 25) & 63;
+            imm4 = (insn >> 31) & 1;
+            // imm = ((imm4 << 12) | (imm1 << 11) | (imm3 << 5) | (imm2 << 1) | 0);
+            printf("INSN: %d\n", insn);
+            imm = ((((imm4 << 1) | (imm1)) << 6 | imm3) << 4 | imm2) << 1;
+            printf("SB IMM: %d\n", imm);
 
             switch (funct3)
             {
@@ -396,7 +408,7 @@ long int simulate(struct memory *mem, struct assembly *as, int start_addr, FILE 
             imm2 = ((insn >> 20) & 0b01);
             imm3 = ((insn >> 21) & 0b01111111111);
             imm4 = (insn >> 31) & 0b1;
-            imm = (unsigned)((imm1 << 12) | (imm2 << 11) | (imm3 << 1) | 0);
+            imm = ((imm1 << 12) | (imm2 << 11) | (imm3 << 1) | 0);
 
             if (imm4)
             {
@@ -416,7 +428,8 @@ long int simulate(struct memory *mem, struct assembly *as, int start_addr, FILE 
                 case FMT_UJ111: //JAL 
                     printf("JAL\n");
                     r[rd] = pc + 4;
-                    pc = pc + imm;
+                    pc = pc + imm - 4;
+                    printf("PC: %d\n", pc);
                     break;
 
                 default:
