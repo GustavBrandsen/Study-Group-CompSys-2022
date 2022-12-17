@@ -16,7 +16,6 @@ void terminate(const char *error)
   printf("  sim riscv-dis -s log     // log only summary\n");
   exit(-1);
 }
-
 int main(int argc, char *argv[])
 {
   if (argc == 2 || argc == 4)

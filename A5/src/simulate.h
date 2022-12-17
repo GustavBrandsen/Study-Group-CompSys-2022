@@ -81,7 +81,14 @@
 #define BGEU 7
 
 // MUL IMPLEMENTATION
-#define REMU 1
+#define MUL 0
+#define MULH 1
+#define MULHSU 2
+#define MULHU 3
+#define DIV 4
+#define DIVU 5
+#define REM 6
+#define REMU 7
 
 // Simuler RISC-V program i givet lager og fra given start adresse
 long int simulate(struct memory *mem, struct assembly *as, int start_addr, FILE *log_file);
