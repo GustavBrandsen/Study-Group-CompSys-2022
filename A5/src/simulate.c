@@ -28,22 +28,20 @@ long int simulate(struct memory *mem, struct assembly *as, int start_addr, FILE 
     int insn = memory_rd_w(mem, pc);
 
     fprintf(log_file, "\n\n\n\n ITERATION LOG: \n\n");
+    fflush(log_file);
     char log_output[32];
     char *r_NAMES[32] = { "zero","ra","sp","gp","tp","t0","t1","t2","s0","s1","a0","a1","a2","a3","a4","a5","a6","a7","s2","s3","s4","s5","s6","s7","s8","s9","s10","s11","t3","t4","t5","t6" };
     int i = -1;
     while (1) {
         i += 1;
         pc = pc + 4;
-        // printf("\nSTART PC : %x\n", pc);
         num_insns += 1;
+
         // We get the instruction(insn)
         insn = memory_rd_w(mem, pc);
-        // // printf("insn: %d \n", memory_rd_w(mem, pc));
-
 
         // We want to decode the instruction (insn) to variables
         int opcode = insn & 127; // Max 127 int
-        //
 
         if (opcode == FMT_I3 || opcode == FMT_I19 || opcode == FMT_I27 || opcode == FMT_I103 || opcode == FMT_I115) {
             rd = (insn >> 7) & 31; // Start from 7th bit, max 31 int
@@ -60,6 +58,7 @@ long int simulate(struct memory *mem, struct assembly *as, int start_addr, FILE 
                             r[rd] = memory_rd_b(mem, (r[rs1] + imm));
                             sprintf((char *)&log_output, "%s,%d(%s)", r_NAMES[rd], imm, r_NAMES[rs1]);
                             fprintf(log_file, "%-3d %2s %5x : %8x    %-8s %-20s %-4s R[%2d] <- %x\n", i, jump_var, pc, insn, "LB", log_output, cond_jump_var, rd, r[rd]);
+                            fflush(log_file);
                             strcpy(jump_var, "");
                             strcpy(cond_jump_var, "");
                             break;
@@ -68,6 +67,7 @@ long int simulate(struct memory *mem, struct assembly *as, int start_addr, FILE 
                             r[rd] = memory_rd_h(mem, (r[rs1] + imm));
                             sprintf((char *)&log_output, "%s,%d(%s)", r_NAMES[rd], imm, r_NAMES[rs1]);
                             fprintf(log_file, "%-3d %2s %5x : %8x    %-8s %-20s %-4s R[%2d] <- %x\n", i, jump_var, pc, insn, "LH", log_output, cond_jump_var, rd, r[rd]);
+                            fflush(log_file);
                             strcpy(jump_var, "");
                             strcpy(cond_jump_var, "");
                             break;
@@ -76,6 +76,7 @@ long int simulate(struct memory *mem, struct assembly *as, int start_addr, FILE 
                             r[rd] = memory_rd_w(mem, (r[rs1] + imm));
                             sprintf((char *)&log_output, "%s,%d(%s)", r_NAMES[rd], imm, r_NAMES[rs1]);
                             fprintf(log_file, "%-3d %2s %5x : %8x    %-8s %-20s %-4s R[%2d] <- %x\n", i, jump_var, pc, insn, "LW", log_output, cond_jump_var, rd, r[rd]);
+                            fflush(log_file);
                             strcpy(jump_var, "");
                             strcpy(cond_jump_var, "");
                             break;
@@ -84,6 +85,7 @@ long int simulate(struct memory *mem, struct assembly *as, int start_addr, FILE 
                             r[rd] = memory_rd_b(mem, (r[rs1] + imm));
                             sprintf((char *)&log_output, "%s,%d(%s)", r_NAMES[rd], imm, r_NAMES[rs1]);
                             fprintf(log_file, "%-3d %2s %5x : %8x    %-8s %-20s %-4s R[%2d] <- %x\n", i, jump_var, pc, insn, "LBU", log_output, cond_jump_var, rd, r[rd]);
+                            fflush(log_file);
                             strcpy(jump_var, "");
                             strcpy(cond_jump_var, "");
                             break;
@@ -92,6 +94,7 @@ long int simulate(struct memory *mem, struct assembly *as, int start_addr, FILE 
                             r[rd] = memory_rd_h(mem, (r[rs1] + imm));
                             sprintf((char *)&log_output, "%s,%d(%s)", r_NAMES[rd], imm, r_NAMES[rs1]);
                             fprintf(log_file, "%-3d %2s %5x : %8x    %-8s %-20s %-4s R[%2d] <- %x\n", i, jump_var, pc, insn, "LHU", log_output, cond_jump_var, rd, r[rd]);
+                            fflush(log_file);
                             strcpy(jump_var, "");
                             strcpy(cond_jump_var, "");
                             break;
@@ -108,6 +111,7 @@ long int simulate(struct memory *mem, struct assembly *as, int start_addr, FILE 
                             r[rd] = r[rs1] + imm;
                             sprintf((char *)&log_output, "%s = %s + %d", r_NAMES[rd], r_NAMES[rs1], imm);
                             fprintf(log_file, "%-3d %2s %5x : %8x    %-8s %-20s %-4s R[%2d] <- %x\n", i, jump_var, pc, insn, "ADDI", log_output, cond_jump_var, rd, r[rd]);
+                            fflush(log_file);
                             strcpy(jump_var, "");
                             strcpy(cond_jump_var, "");
                             break;
@@ -116,6 +120,7 @@ long int simulate(struct memory *mem, struct assembly *as, int start_addr, FILE 
                             r[rd] = r[rs1] << imm;
                             sprintf((char *)&log_output, "%s = %s << %d", r_NAMES[rd], r_NAMES[rs1], imm);
                             fprintf(log_file, "%-3d %2s %5x : %8x    %-8s %-20s %-4s R[%2d] <- %x\n", i, jump_var, pc, insn, "SLLI", log_output, cond_jump_var, rd, r[rd]);
+                            fflush(log_file);
                             strcpy(jump_var, "");
                             strcpy(cond_jump_var, "");
                             break;
@@ -124,6 +129,7 @@ long int simulate(struct memory *mem, struct assembly *as, int start_addr, FILE 
                             r[rd] = (r[rs1] < imm) ? 1 : 0;
                             sprintf((char *)&log_output, "%s = %s < %d", r_NAMES[rd], r_NAMES[rs1], imm);
                             fprintf(log_file, "%-3d %2s %5x : %8x    %-8s %-20s %-4s R[%2d] <- %x\n", i, jump_var, pc, insn, "SLTI", log_output, cond_jump_var, rd, r[rd]);
+                            fflush(log_file);
                             strcpy(jump_var, "");
                             strcpy(cond_jump_var, "");
                             break;
@@ -132,6 +138,7 @@ long int simulate(struct memory *mem, struct assembly *as, int start_addr, FILE 
                             r[rd] = (r[rs1] < imm) ? 1 : 0;
                             sprintf((char *)&log_output, "%s = %s < %d", r_NAMES[rd], r_NAMES[rs1], imm);
                             fprintf(log_file, "%-3d %2s %5x : %8x    %-8s %-20s %-4s R[%2d] <- %x\n", i, jump_var, pc, insn, "SLTIU", log_output, cond_jump_var, rd, r[rd]);
+                            fflush(log_file);
                             strcpy(jump_var, "");
                             strcpy(cond_jump_var, "");
                             break;
@@ -140,6 +147,7 @@ long int simulate(struct memory *mem, struct assembly *as, int start_addr, FILE 
                             r[rd] = r[rs1] ^ imm;
                             sprintf((char *)&log_output, "%s = %s ^ %d", r_NAMES[rd], r_NAMES[rs1], imm);
                             fprintf(log_file, "%-3d %2s %5x : %8x    %-8s %-20s %-4s R[%2d] <- %x\n", i, jump_var, pc, insn, "XORI", log_output, cond_jump_var, rd, r[rd]);
+                            fflush(log_file);
                             strcpy(jump_var, "");
                             strcpy(cond_jump_var, "");
                             break;
@@ -151,6 +159,7 @@ long int simulate(struct memory *mem, struct assembly *as, int start_addr, FILE 
                                     r[rd] = r[rs1] >> imm;
                                     sprintf((char *)&log_output, "%s = %s >> %d", r_NAMES[rd], r_NAMES[rs1], imm);
                                     fprintf(log_file, "%-3d %2s %5x : %8x    %-8s %-20s %-4s R[%2d] <- %x\n", i, jump_var, pc, insn, "SRLI", log_output, cond_jump_var, rd, r[rd]);
+                                    fflush(log_file);
                                     strcpy(jump_var, "");
                                     break;
 
@@ -158,6 +167,7 @@ long int simulate(struct memory *mem, struct assembly *as, int start_addr, FILE 
                                     r[rd] = r[rs1] >> imm;
                                     sprintf((char *)&log_output, "%s >> %s + %d", r_NAMES[rd], r_NAMES[rs1], imm);
                                     fprintf(log_file, "%-3d %2s %5x : %8x    %-8s %-20s %-4s R[%2d] <- %x\n", i, jump_var, pc, insn, "SRAI", log_output, cond_jump_var, rd, r[rd]);
+                                    fflush(log_file);
                                     strcpy(cond_jump_var, "");
                                     break;
 
@@ -167,17 +177,19 @@ long int simulate(struct memory *mem, struct assembly *as, int start_addr, FILE 
                             break;
 
                         case ORI:
-                            r[rd] = r[rs1] || imm;
-                            sprintf((char *)&log_output, "%s || %s + %d", r_NAMES[rd], r_NAMES[rs1], imm);
+                            r[rd] = r[rs1] | imm;
+                            sprintf((char *)&log_output, "%s | %s + %d", r_NAMES[rd], r_NAMES[rs1], imm);
                             fprintf(log_file, "%-3d %2s %5x : %8x    %-8s %-20s %-4s R[%2d] <- %x\n", i, jump_var, pc, insn, "ORI", log_output, cond_jump_var, rd, r[rd]);
+                            fflush(log_file);
                             strcpy(jump_var, "");
                             strcpy(cond_jump_var, "");
                             break;
 
                         case ANDI:
-                            r[rd] = r[rs1] && imm;
-                            sprintf((char *)&log_output, "%s && %s + %d", r_NAMES[rd], r_NAMES[rs1], imm);
+                            r[rd] = r[rs1] & imm;
+                            sprintf((char *)&log_output, "%s & %s + %d", r_NAMES[rd], r_NAMES[rs1], imm);
                             fprintf(log_file, "%-3d %2s %5x : %8x    %-8s %-20s %-4s R[%2d] <- %x\n", i, jump_var, pc, insn, "ANDI", log_output, cond_jump_var, rd, r[rd]);
+                            fflush(log_file);
                             strcpy(jump_var, "");
                             strcpy(cond_jump_var, "");
                             break;
@@ -190,6 +202,7 @@ long int simulate(struct memory *mem, struct assembly *as, int start_addr, FILE 
                 case FMT_I103: // JALR 
                     sprintf((char *)&log_output, "pc = %s + %d", r_NAMES[rs1], imm);
                     fprintf(log_file, "%-3d %2s %5x : %8x    %-8s %-20s %-4s\n", i, jump_var, pc, insn, "JALR", log_output, cond_jump_var);
+                    fflush(log_file);
                     strcpy(jump_var, "=>");
                     strcpy(cond_jump_var, "");
                     pc = (r[rs1] + imm) - 4;
@@ -218,12 +231,14 @@ long int simulate(struct memory *mem, struct assembly *as, int start_addr, FILE 
                                 case 3:
                                     sprintf((char *)&log_output, "EXIT");
                                     fprintf(log_file, "%-3d %2s %5x : %8x    %-8s %-20s %-4s\n", i, jump_var, pc, insn, "ECALL", log_output, cond_jump_var);
+                                    fflush(log_file);
                                     return num_insns;
                                     break;
 
                                 case 93:
                                     sprintf((char *)&log_output, "EXIT");
                                     fprintf(log_file, "%-3d %2s %5x : %8x    %-8s %-20s %-4s\n", i, jump_var, pc, insn, "ECALL", log_output, cond_jump_var);
+                                    fflush(log_file);
                                     return num_insns;
                                     break;
 
@@ -232,6 +247,7 @@ long int simulate(struct memory *mem, struct assembly *as, int start_addr, FILE 
                             }
 
                             fprintf(log_file, "%-3d %2s %5x : %8x    %-8s %-20s %-4s\n", i, jump_var, pc, insn, "ECALL", log_output, cond_jump_var);
+                            fflush(log_file);
                             strcpy(jump_var, "");
                             strcpy(cond_jump_var, "");
 
@@ -253,9 +269,10 @@ long int simulate(struct memory *mem, struct assembly *as, int start_addr, FILE 
             switch (opcode)
             {
                 case FMT_U23: //AUIPC 
-                    r[rd] = pc + imm;
+                    r[rd] = pc - 4 + imm;
                     sprintf((char *)&log_output, "%s = pc + %d", r_NAMES[rd], imm);
                     fprintf(log_file, "%-3d %2s %5x : %8x    %-8s %-20s %-4s R[%2d] <- %x\n", i, jump_var, pc, insn, "AUIPC", log_output, cond_jump_var, rd, r[rd]);
+                    fflush(log_file);
                     strcpy(jump_var, "");
                     strcpy(cond_jump_var, "");
                     break;
@@ -264,6 +281,7 @@ long int simulate(struct memory *mem, struct assembly *as, int start_addr, FILE 
                     r[rd] = imm;
                     sprintf((char *)&log_output, "%s = %d", r_NAMES[rd], imm);
                     fprintf(log_file, "%-3d %2s %5x : %8x    %-8s %-20s %-4s R[%2d] <- %x\n", i, jump_var, pc, insn, "LUI", log_output, cond_jump_var, rd, r[rd]);
+                    fflush(log_file);
                     strcpy(jump_var, "");
                     strcpy(cond_jump_var, "");
                     break;
@@ -282,17 +300,19 @@ long int simulate(struct memory *mem, struct assembly *as, int start_addr, FILE 
             switch (funct3)
             {
                 case SB:
-                    memory_wr_b(mem, r[rs1] + imm, r[rs2]);
+                    memory_wr_b(mem, r[rs1] + imm, r[rs2] % (1 << 8));
                     sprintf((char *)&log_output, "M[%d] = %s", r[rs1] + imm, r_NAMES[rs2]);
                     fprintf(log_file, "%-3d %2s %5x : %8x    %-8s %-20s %-4s R[%2d] <- %x\n", i, jump_var, pc, insn, "SB", log_output, cond_jump_var, rd, r[rd]);
+                    fflush(log_file);
                     strcpy(jump_var, "");
                     strcpy(cond_jump_var, "");
                     break;
 
                 case SH:
-                    memory_wr_h(mem, r[rs1] + imm, r[rs2]);
+                    memory_wr_h(mem, r[rs1] + imm, r[rs2] % (1 << 16));
                     sprintf((char *)&log_output, "M[%d] = %s", r[rs1] + imm, r_NAMES[rs2]);
                     fprintf(log_file, "%-3d %2s %5x : %8x    %-8s %-20s %-4s R[%2d] <- %x\n", i, jump_var, pc, insn, "SH", log_output, cond_jump_var, rd, r[rd]);
+                    fflush(log_file);
                     strcpy(jump_var, "");
                     strcpy(cond_jump_var, "");
                     break;
@@ -301,6 +321,7 @@ long int simulate(struct memory *mem, struct assembly *as, int start_addr, FILE 
                     memory_wr_w(mem, r[rs1] + imm, r[rs2]);
                     sprintf((char *)&log_output, "M[%d] = %s", r[rs1] + imm, r_NAMES[rs2]);
                     fprintf(log_file, "%-3d %2s %5x : %8x    %-8s %-20s %-4s R[%2d] <- %x\n", i, jump_var, pc, insn, "SW", log_output, cond_jump_var, rd, r[rd]);
+                    fflush(log_file);
                     strcpy(jump_var, "");
                     strcpy(cond_jump_var, "");
                     break;
@@ -327,6 +348,7 @@ long int simulate(struct memory *mem, struct assembly *as, int start_addr, FILE 
                                     r[rd] = r[rs1] + r[rs2];
                                     sprintf((char *)&log_output, "%s = %s + %s", r_NAMES[rd], r_NAMES[rs1], r_NAMES[rs2]);
                                     fprintf(log_file, "%-3d %2s %5x : %8x    %-8s %-20s %-4s R[%2d] <- %x\n", i, jump_var, pc, insn, "ADD", log_output, cond_jump_var, rd, r[rd]);
+                                    fflush(log_file);
                                     strcpy(jump_var, "");
                                     strcpy(cond_jump_var, "");
                                     break;
@@ -335,6 +357,7 @@ long int simulate(struct memory *mem, struct assembly *as, int start_addr, FILE 
                                     r[rd] = r[rs1] - r[rs2];
                                     sprintf((char *)&log_output, "%s = %s - %s", r_NAMES[rd], r_NAMES[rs1], r_NAMES[rs2]);
                                     fprintf(log_file, "%-3d %2s %5x : %8x    %-8s %-20s %-4s R[%2d] <- %x\n", i, jump_var, pc, insn, "SUB", log_output, cond_jump_var, rd, r[rd]);
+                                    fflush(log_file);
                                     strcpy(jump_var, "");
                                     strcpy(cond_jump_var, "");
                                     break;
@@ -348,6 +371,7 @@ long int simulate(struct memory *mem, struct assembly *as, int start_addr, FILE 
                             r[rd] = r[rs1] << r[rs2];
                             sprintf((char *)&log_output, "%s = %s << %s", r_NAMES[rd], r_NAMES[rs1], r_NAMES[rs2]);
                             fprintf(log_file, "%-3d %2s %5x : %8x    %-8s %-20s %-4s R[%2d] <- %x\n", i, jump_var, pc, insn, "SLL", log_output, cond_jump_var, rd, r[rd]);
+                            fflush(log_file);
                             strcpy(jump_var, "");
                             strcpy(cond_jump_var, "");
                             break;
@@ -356,6 +380,7 @@ long int simulate(struct memory *mem, struct assembly *as, int start_addr, FILE 
                             r[rd] = (r[rs1] < r[rs2]) ? 1 : 0;
                             sprintf((char *)&log_output, "%s = %s < %s", r_NAMES[rd], r_NAMES[rs1], r_NAMES[rs2]);
                             fprintf(log_file, "%-3d %2s %5x : %8x    %-8s %-20s %-4s R[%2d] <- %x\n", i, jump_var, pc, insn, "SLT", log_output, cond_jump_var, rd, r[rd]);
+                            fflush(log_file);
                             strcpy(jump_var, "");
                             strcpy(cond_jump_var, "");
                             break;
@@ -364,6 +389,7 @@ long int simulate(struct memory *mem, struct assembly *as, int start_addr, FILE 
                             r[rd] = (r[rs1] < r[rs2]) ? 1 : 0;
                             sprintf((char *)&log_output, "%s = %s < %s", r_NAMES[rd], r_NAMES[rs1], r_NAMES[rs2]);
                             fprintf(log_file, "%-3d %2s %5x : %8x    %-8s %-20s %-4s R[%2d] <- %x\n", i, jump_var, pc, insn, "SLTU", log_output, cond_jump_var, rd, r[rd]);
+                            fflush(log_file);
                             strcpy(jump_var, "");
                             strcpy(cond_jump_var, "");
                             break;
@@ -372,6 +398,7 @@ long int simulate(struct memory *mem, struct assembly *as, int start_addr, FILE 
                             r[rd] = r[rs1] ^ r[rs2];
                             sprintf((char *)&log_output, "%s = %s ^ %s", r_NAMES[rd], r_NAMES[rs1], r_NAMES[rs2]);
                             fprintf(log_file, "%-3d %2s %5x : %8x    %-8s %-20s %-4s R[%2d] <- %x\n", i, jump_var, pc, insn, "XOR", log_output, cond_jump_var, rd, r[rd]);
+                            fflush(log_file);
                             strcpy(jump_var, "");
                             strcpy(cond_jump_var, "");
                             break;
@@ -383,6 +410,7 @@ long int simulate(struct memory *mem, struct assembly *as, int start_addr, FILE 
                                     r[rd] = r[rs1] >> r[rs2];
                                     sprintf((char *)&log_output, "%s = %s >> %s", r_NAMES[rd], r_NAMES[rs1], r_NAMES[rs2]);
                                     fprintf(log_file, "%-3d %2s %5x : %8x    %-8s %-20s %-4s R[%2d] <- %x\n", i, jump_var, pc, insn, "SRL", log_output, cond_jump_var, rd, r[rd]);
+                                    fflush(log_file);
                                     strcpy(jump_var, "");
                                     strcpy(cond_jump_var, "");
                                     break;
@@ -391,6 +419,7 @@ long int simulate(struct memory *mem, struct assembly *as, int start_addr, FILE 
                                     r[rd] = r[rs1] >> r[rs2];
                                     sprintf((char *)&log_output, "%s = %s >> %s", r_NAMES[rd], r_NAMES[rs1], r_NAMES[rs2]);
                                     fprintf(log_file, "%-3d %2s %5x : %8x    %-8s %-20s %-4s R[%2d] <- %x\n", i, jump_var, pc, insn, "SRA", log_output, cond_jump_var, rd, r[rd]);
+                                    fflush(log_file);
                                     strcpy(jump_var, "");
                                     strcpy(cond_jump_var, "");
                                     break;
@@ -401,9 +430,10 @@ long int simulate(struct memory *mem, struct assembly *as, int start_addr, FILE 
                             break;
 
                         case OR:
-                            r[rd] = r[rs1] || r[rs2];
-                            sprintf((char *)&log_output, "%s = %s || %s", r_NAMES[rd], r_NAMES[rs1], r_NAMES[rs2]);
+                            r[rd] = r[rs1] | r[rs2];
+                            sprintf((char *)&log_output, "%s = %s | %s", r_NAMES[rd], r_NAMES[rs1], r_NAMES[rs2]);
                             fprintf(log_file, "%-3d %2s %5x : %8x    %-8s %-20s %-4s R[%2d] <- %x\n", i, jump_var, pc, insn, "OR", log_output, cond_jump_var, rd, r[rd]);
+                            fflush(log_file);
                             strcpy(jump_var, "");
                             strcpy(cond_jump_var, "");
                             break;
@@ -412,9 +442,10 @@ long int simulate(struct memory *mem, struct assembly *as, int start_addr, FILE 
                             switch (funct7)
                             {
                                 case AND:
-                                    r[rd] = r[rs1] && r[rs2];
-                                    sprintf((char *)&log_output, "%s = %s && %s", r_NAMES[rd], r_NAMES[rs1], r_NAMES[rs2]);
+                                    r[rd] = r[rs1] & r[rs2];
+                                    sprintf((char *)&log_output, "%s = %s & %s", r_NAMES[rd], r_NAMES[rs1], r_NAMES[rs2]);
                                     fprintf(log_file, "%-3d %2s %5x : %8x    %-8s %-20s %-4s R[%2d] <- %x\n", i, jump_var, pc, insn, "AND", log_output, cond_jump_var, rd, r[rd]);
+                                    fflush(log_file);
                                     strcpy(jump_var, "");
                                     strcpy(cond_jump_var, "");
                                     break;
@@ -426,6 +457,7 @@ long int simulate(struct memory *mem, struct assembly *as, int start_addr, FILE 
                                             r[rd] = (long int)(r[rs1] * r[rs2]) % ((long int)1 << 32);
                                             sprintf((char *)&log_output, "%s = %s * %s (31:0)", r_NAMES[rd], r_NAMES[rs1], r_NAMES[rs2]);
                                             fprintf(log_file, "%-3d %2s %5x : %8x    %-8s %-20s %-4s R[%2d] <- %x\n", i, jump_var, pc, insn, "MUL", log_output, cond_jump_var, rd, r[rd]);
+                                            fflush(log_file);
                                             strcpy(jump_var, "");
                                             strcpy(cond_jump_var, "");
                                             break;
@@ -434,6 +466,7 @@ long int simulate(struct memory *mem, struct assembly *as, int start_addr, FILE 
                                             r[rd] = (long int)(r[rs1] * r[rs2]) >> 32;
                                             sprintf((char *)&log_output, "%s = %s * %s (63:32)", r_NAMES[rd], r_NAMES[rs1], r_NAMES[rs2]);
                                             fprintf(log_file, "%-3d %2s %5x : %8x    %-8s %-20s %-4s R[%2d] <- %x\n", i, jump_var, pc, insn, "MULH", log_output, cond_jump_var, rd, r[rd]);
+                                            fflush(log_file);
                                             strcpy(jump_var, "");
                                             strcpy(cond_jump_var, "");
                                             break;
@@ -442,6 +475,7 @@ long int simulate(struct memory *mem, struct assembly *as, int start_addr, FILE 
                                             r[rd] = (long unsigned int)(r[rs1] * r[rs2]) >> 32;
                                             sprintf((char *)&log_output, "%s = %s * %s (63:32)", r_NAMES[rd], r_NAMES[rs1], r_NAMES[rs2]);
                                             fprintf(log_file, "%-3d %2s %5x : %8x    %-8s %-20s %-4s R[%2d] <- %x\n", i, jump_var, pc, insn, "MULHSU", log_output, cond_jump_var, rd, r[rd]);
+                                            fflush(log_file);
                                             strcpy(jump_var, "");
                                             strcpy(cond_jump_var, "");
                                             break;
@@ -450,6 +484,7 @@ long int simulate(struct memory *mem, struct assembly *as, int start_addr, FILE 
                                             r[rd] = (long int)(r[rs1] * r[rs2]) >> 32;
                                             sprintf((char *)&log_output, "%s = %s * %s (63:32)", r_NAMES[rd], r_NAMES[rs1], r_NAMES[rs2]);
                                             fprintf(log_file, "%-3d %2s %5x : %8x    %-8s %-20s %-4s R[%2d] <- %x\n", i, jump_var, pc, insn, "MULHU", log_output, cond_jump_var, rd, r[rd]);
+                                            fflush(log_file);
                                             strcpy(jump_var, "");
                                             strcpy(cond_jump_var, "");
                                             break;
@@ -458,6 +493,7 @@ long int simulate(struct memory *mem, struct assembly *as, int start_addr, FILE 
                                             r[rd] = r[rs1] / r[rs2];
                                             sprintf((char *)&log_output, "%s = %s / %s", r_NAMES[rd], r_NAMES[rs1], r_NAMES[rs2]);
                                             fprintf(log_file, "%-3d %2s %5x : %8x    %-8s %-20s %-4s R[%2d] <- %x\n", i, jump_var, pc, insn, "DIV", log_output, cond_jump_var, rd, r[rd]);
+                                            fflush(log_file);
                                             strcpy(jump_var, "");
                                             strcpy(cond_jump_var, "");
                                             break;
@@ -466,6 +502,7 @@ long int simulate(struct memory *mem, struct assembly *as, int start_addr, FILE 
                                             r[rd] = r[rs1] / r[rs2];
                                             sprintf((char *)&log_output, "%s = %s / %s", r_NAMES[rd], r_NAMES[rs1], r_NAMES[rs2]);
                                             fprintf(log_file, "%-3d %2s %5x : %8x    %-8s %-20s %-4s R[%2d] <- %x\n", i, jump_var, pc, insn, "DIVU", log_output, cond_jump_var, rd, r[rd]);
+                                            fflush(log_file);
                                             strcpy(jump_var, "");
                                             strcpy(cond_jump_var, "");
                                             break;
@@ -474,6 +511,7 @@ long int simulate(struct memory *mem, struct assembly *as, int start_addr, FILE 
                                             r[rd] = r[rs1] % r[rs2];
                                             sprintf((char *)&log_output, "%s = %s %% %s", r_NAMES[rd], r_NAMES[rs1], r_NAMES[rs2]);
                                             fprintf(log_file, "%-3d %2s %5x : %8x    %-8s %-20s %-4s R[%2d] <- %x\n", i, jump_var, pc, insn, "REM", log_output, cond_jump_var, rd, r[rd]);
+                                            fflush(log_file);
                                             strcpy(jump_var, "");
                                             strcpy(cond_jump_var, "");
                                             break;
@@ -482,6 +520,7 @@ long int simulate(struct memory *mem, struct assembly *as, int start_addr, FILE 
                                             r[rd] = r[rs1] % r[rs2];
                                             sprintf((char *)&log_output, "%s = %s %% %s", r_NAMES[rd], r_NAMES[rs1], r_NAMES[rs2]);
                                             fprintf(log_file, "%-3d %2s %5x : %8x    %-8s %-20s %-4s R[%2d] <- %x\n", i, jump_var, pc, insn, "REMU", log_output, cond_jump_var, rd, r[rd]);
+                                            fflush(log_file);
                                             strcpy(jump_var, "");
                                             strcpy(cond_jump_var, "");
                                             break;
@@ -526,12 +565,14 @@ long int simulate(struct memory *mem, struct assembly *as, int start_addr, FILE 
                     {
                         sprintf((char *)&log_output, "pc = pc + %d", imm);
                         fprintf(log_file, "%-3d %2s %5x : %8x    %-8s %-20s %-4s\n", i, jump_var, pc, insn, "BEQ", log_output, cond_jump_var);
+                        fflush(log_file);
                         strcpy(jump_var, "");
                         strcpy(cond_jump_var, "{T}");
                         pc = pc + imm - 4;
                     } else {
                         sprintf((char *)&log_output, "pc = pc");
                         fprintf(log_file, "%-3d %2s %5x : %8x    %-8s %-20s %-4s\n", i, jump_var, pc, insn, "BEQ", log_output, cond_jump_var);
+                        fflush(log_file);
                         strcpy(jump_var, "");
                         strcpy(cond_jump_var, "");
                     }
@@ -542,12 +583,14 @@ long int simulate(struct memory *mem, struct assembly *as, int start_addr, FILE 
                     {
                         sprintf((char *)&log_output, "pc = pc + %d", imm);
                         fprintf(log_file, "%-3d %2s %5x : %8x    %-8s %-20s %-4s\n", i, jump_var, pc, insn, "BNE", log_output, cond_jump_var);
+                        fflush(log_file);
                         strcpy(jump_var, "");
                         strcpy(cond_jump_var, "{T}");
                         pc = pc + imm - 4;
                     } else {
                         sprintf((char *)&log_output, "pc = pc");
                         fprintf(log_file, "%-3d %2s %5x : %8x    %-8s %-20s %-4s\n", i, jump_var, pc, insn, "BNE", log_output, cond_jump_var);
+                        fflush(log_file);
                         strcpy(jump_var, "");
                         strcpy(cond_jump_var, "");
                     }
@@ -558,12 +601,14 @@ long int simulate(struct memory *mem, struct assembly *as, int start_addr, FILE 
                     {
                         sprintf((char *)&log_output, "pc = pc + %d", imm);
                         fprintf(log_file, "%-3d %2s %5x : %8x    %-8s %-20s %-4s\n", i, jump_var, pc, insn, "BLT", log_output, cond_jump_var);
+                        fflush(log_file);
                         strcpy(jump_var, "");
                         strcpy(cond_jump_var, "{T}");
                         pc = pc + imm - 4;
                     } else {
                         sprintf((char *)&log_output, "pc = pc");
                         fprintf(log_file, "%-3d %2s %5x : %8x    %-8s %-20s %-4s\n", i, jump_var, pc, insn, "BLT", log_output, cond_jump_var);
+                        fflush(log_file);
                         strcpy(jump_var, "");
                         strcpy(cond_jump_var, "");
                     }
@@ -574,12 +619,14 @@ long int simulate(struct memory *mem, struct assembly *as, int start_addr, FILE 
                     {
                         sprintf((char *)&log_output, "pc = pc + %d", imm);
                         fprintf(log_file, "%-3d %2s %5x : %8x    %-8s %-20s %-4s\n", i, jump_var, pc, insn, "BGE", log_output, cond_jump_var);
+                        fflush(log_file);
                         strcpy(jump_var, "");
                         strcpy(cond_jump_var, "{T}");
                         pc = pc + imm - 4;
                     } else {
                         sprintf((char *)&log_output, "pc = pc");
                         fprintf(log_file, "%-3d %2s %5x : %8x    %-8s %-20s %-4s\n", i, jump_var, pc, insn, "BGE", log_output, cond_jump_var);
+                        fflush(log_file);
                         strcpy(jump_var, "");
                         strcpy(cond_jump_var, "");
                     }
@@ -590,12 +637,14 @@ long int simulate(struct memory *mem, struct assembly *as, int start_addr, FILE 
                     {
                         sprintf((char *)&log_output, "pc = pc + %d", imm);
                         fprintf(log_file, "%-3d %2s %5x : %8x    %-8s %-20s %-4s\n", i, jump_var, pc, insn, "BLTU", log_output, cond_jump_var);
+                        fflush(log_file);
                         strcpy(jump_var, "");
                         strcpy(cond_jump_var, "{T}");
                         pc = pc + imm - 4;
                     } else {
                         sprintf((char *)&log_output, "pc = pc");
                         fprintf(log_file, "%-3d %2s %5x : %8x    %-8s %-20s %-4s\n", i, jump_var, pc, insn, "BLTU", log_output, cond_jump_var);
+                        fflush(log_file);
                         strcpy(jump_var, "");
                         strcpy(cond_jump_var, "");
                     }
@@ -606,12 +655,14 @@ long int simulate(struct memory *mem, struct assembly *as, int start_addr, FILE 
                     {
                         sprintf((char *)&log_output, "pc = pc + %d", imm);
                         fprintf(log_file, "%-3d %2s %5x : %8x    %-8s %-20s %-4s\n", i, jump_var, pc, insn, "BGEU", log_output, cond_jump_var);
+                        fflush(log_file);
                         strcpy(jump_var, "");
                         strcpy(cond_jump_var, "{T}");
                         pc = pc + imm - 4;
                     } else {
                         sprintf((char *)&log_output, "pc = pc");
                         fprintf(log_file, "%-3d %2s %5x : %8x    %-8s %-20s %-4s\n", i, jump_var, pc, insn, "BGEU", log_output, cond_jump_var);
+                        fflush(log_file);
                         strcpy(jump_var, "");
                         strcpy(cond_jump_var, "");
                     }
@@ -641,6 +692,7 @@ long int simulate(struct memory *mem, struct assembly *as, int start_addr, FILE 
                     r[rd] = pc + 4;
                     sprintf((char *)&log_output, "pc = pc + %d", imm);
                     fprintf(log_file, "%-3d %2s %5x : %8x    %-8s %-20s %-4s\n", i, jump_var, pc, insn, "JAL", log_output, cond_jump_var);
+                    fflush(log_file);
                     strcpy(jump_var, "=>");
                     strcpy(cond_jump_var, "");
                     pc = pc + imm - 4;
@@ -650,6 +702,9 @@ long int simulate(struct memory *mem, struct assembly *as, int start_addr, FILE 
                     break;
             }
         }
+        // We don't use as, so here we just remove the warning
+        struct assembly *as2 = as;
+        as = as2;
     }
     return num_insns;
 }
