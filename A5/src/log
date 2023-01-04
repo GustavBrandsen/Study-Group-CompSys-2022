@@ -1,1165 +1,343 @@
 1 -- Ukendt -- 
-2 -- Ukendt -- echo.riscv:     file format elf32-littleriscv
+2 -- Ukendt -- hello.riscv:     file format elf32-littleriscv
 3 -- Ukendt -- 
 4 -- Ukendt -- Contents of section .text:
-5 -- Data --  10054 130101f7 23261108 37050100 13050524  ....#&..7......$
-6 -- Data --  10064 ef00c006 93050008 13050100 ef008009  ................
-7 -- Data --  10074 37050100 13054527 ef004005 13050100  7.....E'..@.....
-8 -- Data --  10084 ef00c004 8320c108 13010109 67800000  ..... ......g...
-9 -- Data --  10094 37010001 eff0dffb ef008002 93081000  7...............
-10 -- Data --  100a4 73000000 33051001 1375f50f 67800000  s...3....u..g...
-11 -- Data --  100b4 93082000 3308a000 73000000 67800000  .. .3...s...g...
-12 -- Data --  100c4 93083000 73000000 67800000 130101ff  ..0.s...g.......
-13 -- Data --  100d4 23261100 23248100 13040500 03450500  #&..#$.......E..
-14 -- Data --  100e4 630a0500 13041400 eff09ffc 03450400  c............E..
-15 -- Data --  100f4 e31a05fe 8320c100 03248100 13010101  ..... ...$......
-16 -- Data --  10104 67800000 130101fe 232e1100 232c8100  g.......#...#,..
-17 -- Data --  10114 232a9100 23282101 23263101 13040500  #*..#(!.#&1.....
-18 -- Data --  10124 93840500 eff09ff7 9307a000 6300f504  ............c...
-19 -- Data --  10134 9307d000 630cf502 93071000 63d89702  ....c.......c...
-20 -- Data --  10144 9384f4ff b3049400 1309a000 9309d000  ................
-21 -- Data --  10154 13041400 a30fa4fe eff05ff4 63082501  .........._.c.%.
-22 -- Data --  10164 63063501 e31694fe 13840400 23000400  c.5.........#...
-23 -- Data --  10174 8320c101 03248101 83244101 03290101  . ...$...$A..)..
-24 -- Data --  10184 8329c100 13010102 67800000 93070500  .)......g.......
-25 -- Data --  10194 93061500 03450500 130505fd 03c71700  .....E..........
-26 -- Data --  101a4 63020702 93861600 93172500 3385a700  c.........%.3...
-27 -- Data --  101b4 13151500 3305e500 130505fd 03c70600  ....3...........
-28 -- Data --  101c4 e31207fe 67800000 13070500 93060500  ....g...........
-29 -- Data --  101d4 1305a000 13089000 63880504 93870600  ........c.......
-30 -- Data --  101e4 93861600 33f6a502 13060603 a38fc6fe  ....3...........
-31 -- Data --  101f4 13860500 b3d5a502 e362c8fe 23800600  .........b..#...
-32 -- Data --  10204 3385e740 6370f702 83c60700 03460700  3..@cp.......F..
-33 -- Data --  10214 2380c700 2300d700 9387f7ff 13071700  #...#...........
-34 -- Data --  10224 e364f7fe 67800000 93070003 2300f700  .d..g.......#...
-35 -- Data --  10234 a3000700 13051000 67800000           ........g...    
-36 -- Ukendt -- Contents of section .rodata:
-37 -- Data --  10240 48656a20 6d656420 64696720 2d20736b  Hej med dig - sk
-38 -- Data --  10250 72697620 6e6f6765 742c2073 61612062  riv noget, saa b
-39 -- Data --  10260 6c697665 72206a65 6720676c 61643a20  liver jeg glad: 
-40 -- Data --  10270 00000000 44752073 6b726576 3a2000    ....Du skrev: . 
-41 -- Ukendt -- Contents of section .comment:
-42 -- Data --  0000 4743433a 2028474e 55292031 302e322e  GCC: (GNU) 10.2.
-43 -- Data --  0010 3000                                 0.              
-44 -- Ukendt -- Contents of section .riscv.attributes:
-45 -- Data --  0000 41200000 00726973 63760001 16000000  A ...riscv......
-46 -- Data --  0010 04100572 76333269 3270305f 6d327030  ...rv32i2p0_m2p0
-47 -- Data --  0020 00                                   .               
+5 -- Data --  10074 130101ff 23248100 37140100 03458422  ....#$..7....E."
+6 -- Data --  10084 23261100 630c0500 13048422 13041400  #&..c......"....
+7 -- Data --  10094 ef000004 03450400 e31a05fe 8320c100  .....E....... ..
+8 -- Data --  100a4 03248100 13050000 13010101 67800000  .$..........g...
+9 -- Data --  100b4 37010001 eff0dffb ef008002 93081000  7...............
+10 -- Data --  100c4 73000000 33051001 1375f50f 67800000  s...3....u..g...
+11 -- Data --  100d4 93082000 3308a000 73000000 67800000  .. .3...s...g...
+12 -- Data --  100e4 93083000 73000000 67800000 6f004001  ..0.s...g...o.@.
+13 -- Data --  100f4 13051500 93082000 3308f000 73000000  ...... .3...s...
+14 -- Data --  10104 83470500 e39607fe 67800000 93081000  .G......g.......
+15 -- Data --  10114 73000000 33071001 9307a000 1377f70f  s...3........w..
+16 -- Data --  10124 6306f704 9307d000 6302f704 93071000  c.......c.......
+17 -- Data --  10134 63deb702 9385f5ff b306b500 93070700  c...............
+18 -- Data --  10144 1306a000 9305d000 6f00c000 6380b702  ........o...c...
+19 -- Data --  10154 630ed500 13051500 a30fe5fe 93081000  c...............
+20 -- Data --  10164 73000000 13870700 e392c7fe 23000500  s...........#...
+21 -- Data --  10174 67800000 83470500 83461500 13071500  g....G...F......
+22 -- Data --  10184 138507fd 63820602 93172500 3385a700  ....c.....%.3...
+23 -- Data --  10194 13071700 13151500 3305d500 83460700  ........3....F..
+24 -- Data --  101a4 130505fd e39206fe 67800000 13070500  ........g.......
+25 -- Data --  101b4 13060500 93089000 1305a000 638a0504  ............c...
+26 -- Data --  101c4 b3f6a502 93070600 13061600 13880500  ................
+27 -- Data --  101d4 93860603 a30fd6fe b3d5a502 e3e208ff  ................
+28 -- Data --  101e4 23000600 3385e740 6366f700 6f000002  #...3..@cf..o...
+29 -- Data --  101f4 83c60700 03460700 13071700 9387f7ff  .....F..........
+30 -- Data --  10204 a380c700 a30fd7fe e364f7fe 67800000  .........d..g...
+31 -- Data --  10214 93070003 2300f700 a3000700 13051000  ....#...........
+32 -- Data --  10224 67800000                             g...            
+33 -- Ukendt -- Contents of section .data:
+34 -- Data --  11228 48656c6c 6f206672 6f6d2052 4953432d  Hello from RISC-
+35 -- Data --  11238 560a00                               V..             
+36 -- Ukendt -- Contents of section .comment:
+37 -- Data --  0000 4743433a 2028474e 55292031 302e322e  GCC: (GNU) 10.2.
+38 -- Data --  0010 3000                                 0.              
+39 -- Ukendt -- Contents of section .riscv.attributes:
+40 -- Data --  0000 41200000 00726973 63760001 16000000  A ...riscv......
+41 -- Data --  0010 04100572 76333269 3270305f 6d327030  ...rv32i2p0_m2p0
+42 -- Data --  0020 00                                   .               
+43 -- Ukendt -- 
+44 -- Ukendt -- hello.riscv:     file format elf32-littleriscv
+45 -- Ukendt -- 
+46 -- Ukendt -- 
+47 -- Ukendt -- Disassembly of section .text:
 48 -- Ukendt -- 
-49 -- Ukendt -- echo.riscv:     file format elf32-littleriscv
-50 -- Ukendt -- 
-51 -- Ukendt -- 
-52 -- Ukendt -- Disassembly of section .text:
-53 -- Ukendt -- 
-54 -- Entry -- 00010054 <main>:
-55 -- Insn --    10054:	f7010113          	addi	sp,sp,-144
-56 -- Insn --    10058:	08112623          	sw	ra,140(sp)
-57 -- Insn --    1005c:	00010537          	lui	a0,0x10
-58 -- Insn --    10060:	24050513          	addi	a0,a0,576 # 10240 <uns_to_str+0x74>
-59 -- Insn --    10064:	06c000ef          	jal	ra,100d0 <print_string>
-60 -- Insn --    10068:	08000593          	li	a1,128
-61 -- Insn --    1006c:	00010513          	mv	a0,sp
-62 -- Insn --    10070:	098000ef          	jal	ra,10108 <read_string>
-63 -- Insn --    10074:	00010537          	lui	a0,0x10
-64 -- Insn --    10078:	27450513          	addi	a0,a0,628 # 10274 <uns_to_str+0xa8>
-65 -- Insn --    1007c:	054000ef          	jal	ra,100d0 <print_string>
-66 -- Insn --    10080:	00010513          	mv	a0,sp
-67 -- Insn --    10084:	04c000ef          	jal	ra,100d0 <print_string>
-68 -- Insn --    10088:	08c12083          	lw	ra,140(sp)
-69 -- Insn --    1008c:	09010113          	addi	sp,sp,144
-70 -- Insn --    10090:	00008067          	ret
+49 -- Entry -- 00010074 <main>:
+50 -- Insn --    10074:	ff010113          	addi	sp,sp,-16
+51 -- Insn --    10078:	00812423          	sw	s0,8(sp)
+52 -- Insn --    1007c:	00011437          	lui	s0,0x11
+53 -- Insn --    10080:	22844503          	lbu	a0,552(s0) # 11228 <m>
+54 -- Insn --    10084:	00112623          	sw	ra,12(sp)
+55 -- Insn --    10088:	00050c63          	beqz	a0,100a0 <main+0x2c>
+56 -- Insn --    1008c:	22840413          	addi	s0,s0,552
+57 -- Insn --    10090:	00140413          	addi	s0,s0,1
+58 -- Insn --    10094:	040000ef          	jal	ra,100d4 <outp>
+59 -- Insn --    10098:	00044503          	lbu	a0,0(s0)
+60 -- Insn --    1009c:	fe051ae3          	bnez	a0,10090 <main+0x1c>
+61 -- Insn --    100a0:	00c12083          	lw	ra,12(sp)
+62 -- Insn --    100a4:	00812403          	lw	s0,8(sp)
+63 -- Insn --    100a8:	00000513          	li	a0,0
+64 -- Insn --    100ac:	01010113          	addi	sp,sp,16
+65 -- Insn --    100b0:	00008067          	ret
+66 -- Ukendt -- 
+67 -- Start -- 000100b4 <_start>:
+68 -- Insn --    100b4:	01000137          	lui	sp,0x1000
+69 -- Insn --    100b8:	fbdff0ef          	jal	ra,10074 <main>
+70 -- Insn --    100bc:	028000ef          	jal	ra,100e4 <terminate>
 71 -- Ukendt -- 
-72 -- Start -- 00010094 <_start>:
-73 -- Insn --    10094:	01000137          	lui	sp,0x1000
-74 -- Insn --    10098:	fbdff0ef          	jal	ra,10054 <main>
-75 -- Insn --    1009c:	028000ef          	jal	ra,100c4 <terminate>
-76 -- Ukendt -- 
-77 -- Entry -- 000100a0 <inp>:
-78 -- Insn --    100a0:	00100893          	li	a7,1
-79 -- Insn --    100a4:	00000073          	ecall
-80 -- Insn --    100a8:	01100533          	add	a0,zero,a7
-81 -- Insn --    100ac:	0ff57513          	andi	a0,a0,255
-82 -- Insn --    100b0:	00008067          	ret
-83 -- Ukendt -- 
-84 -- Entry -- 000100b4 <outp>:
-85 -- Insn --    100b4:	00200893          	li	a7,2
-86 -- Insn --    100b8:	00a00833          	add	a6,zero,a0
-87 -- Insn --    100bc:	00000073          	ecall
-88 -- Insn --    100c0:	00008067          	ret
+72 -- Entry -- 000100c0 <inp>:
+73 -- Insn --    100c0:	00100893          	li	a7,1
+74 -- Insn --    100c4:	00000073          	ecall
+75 -- Insn --    100c8:	01100533          	add	a0,zero,a7
+76 -- Insn --    100cc:	0ff57513          	andi	a0,a0,255
+77 -- Insn --    100d0:	00008067          	ret
+78 -- Ukendt -- 
+79 -- Entry -- 000100d4 <outp>:
+80 -- Insn --    100d4:	00200893          	li	a7,2
+81 -- Insn --    100d8:	00a00833          	add	a6,zero,a0
+82 -- Insn --    100dc:	00000073          	ecall
+83 -- Insn --    100e0:	00008067          	ret
+84 -- Ukendt -- 
+85 -- Entry -- 000100e4 <terminate>:
+86 -- Insn --    100e4:	00300893          	li	a7,3
+87 -- Insn --    100e8:	00000073          	ecall
+88 -- Insn --    100ec:	00008067          	ret
 89 -- Ukendt -- 
-90 -- Entry -- 000100c4 <terminate>:
-91 -- Insn --    100c4:	00300893          	li	a7,3
-92 -- Insn --    100c8:	00000073          	ecall
-93 -- Insn --    100cc:	00008067          	ret
-94 -- Ukendt -- 
-95 -- Entry -- 000100d0 <print_string>:
-96 -- Insn --    100d0:	ff010113          	addi	sp,sp,-16 # fffff0 <__global_pointer$+0xfee571>
-97 -- Insn --    100d4:	00112623          	sw	ra,12(sp)
-98 -- Insn --    100d8:	00812423          	sw	s0,8(sp)
-99 -- Insn --    100dc:	00050413          	mv	s0,a0
-100 -- Insn --    100e0:	00054503          	lbu	a0,0(a0)
-101 -- Insn --    100e4:	00050a63          	beqz	a0,100f8 <print_string+0x28>
-102 -- Insn --    100e8:	00140413          	addi	s0,s0,1
-103 -- Insn --    100ec:	fc9ff0ef          	jal	ra,100b4 <outp>
-104 -- Insn --    100f0:	00044503          	lbu	a0,0(s0)
-105 -- Insn --    100f4:	fe051ae3          	bnez	a0,100e8 <print_string+0x18>
-106 -- Insn --    100f8:	00c12083          	lw	ra,12(sp)
-107 -- Insn --    100fc:	00812403          	lw	s0,8(sp)
-108 -- Insn --    10100:	01010113          	addi	sp,sp,16
-109 -- Insn --    10104:	00008067          	ret
-110 -- Ukendt -- 
-111 -- Entry -- 00010108 <read_string>:
-112 -- Insn --    10108:	fe010113          	addi	sp,sp,-32
-113 -- Insn --    1010c:	00112e23          	sw	ra,28(sp)
-114 -- Insn --    10110:	00812c23          	sw	s0,24(sp)
-115 -- Insn --    10114:	00912a23          	sw	s1,20(sp)
-116 -- Insn --    10118:	01212823          	sw	s2,16(sp)
-117 -- Insn --    1011c:	01312623          	sw	s3,12(sp)
-118 -- Insn --    10120:	00050413          	mv	s0,a0
-119 -- Insn --    10124:	00058493          	mv	s1,a1
-120 -- Insn --    10128:	f79ff0ef          	jal	ra,100a0 <inp>
-121 -- Insn --    1012c:	00a00793          	li	a5,10
-122 -- Insn --    10130:	04f50063          	beq	a0,a5,10170 <read_string+0x68>
-123 -- Insn --    10134:	00d00793          	li	a5,13
-124 -- Insn --    10138:	02f50c63          	beq	a0,a5,10170 <read_string+0x68>
-125 -- Insn --    1013c:	00100793          	li	a5,1
-126 -- Insn --    10140:	0297d863          	bge	a5,s1,10170 <read_string+0x68>
-127 -- Insn --    10144:	fff48493          	addi	s1,s1,-1
-128 -- Insn --    10148:	009404b3          	add	s1,s0,s1
-129 -- Insn --    1014c:	00a00913          	li	s2,10
-130 -- Insn --    10150:	00d00993          	li	s3,13
-131 -- Insn --    10154:	00140413          	addi	s0,s0,1
-132 -- Insn --    10158:	fea40fa3          	sb	a0,-1(s0)
-133 -- Insn --    1015c:	f45ff0ef          	jal	ra,100a0 <inp>
-134 -- Insn --    10160:	01250863          	beq	a0,s2,10170 <read_string+0x68>
-135 -- Insn --    10164:	01350663          	beq	a0,s3,10170 <read_string+0x68>
-136 -- Insn --    10168:	fe9416e3          	bne	s0,s1,10154 <read_string+0x4c>
-137 -- Insn --    1016c:	00048413          	mv	s0,s1
-138 -- Insn --    10170:	00040023          	sb	zero,0(s0)
-139 -- Insn --    10174:	01c12083          	lw	ra,28(sp)
-140 -- Insn --    10178:	01812403          	lw	s0,24(sp)
-141 -- Insn --    1017c:	01412483          	lw	s1,20(sp)
-142 -- Insn --    10180:	01012903          	lw	s2,16(sp)
-143 -- Insn --    10184:	00c12983          	lw	s3,12(sp)
-144 -- Insn --    10188:	02010113          	addi	sp,sp,32
-145 -- Insn --    1018c:	00008067          	ret
-146 -- Ukendt -- 
-147 -- Entry -- 00010190 <str_to_uns>:
-148 -- Insn --    10190:	00050793          	mv	a5,a0
-149 -- Insn --    10194:	00150693          	addi	a3,a0,1
-150 -- Insn --    10198:	00054503          	lbu	a0,0(a0)
-151 -- Insn --    1019c:	fd050513          	addi	a0,a0,-48
-152 -- Insn --    101a0:	0017c703          	lbu	a4,1(a5)
-153 -- Insn --    101a4:	02070263          	beqz	a4,101c8 <str_to_uns+0x38>
-154 -- Insn --    101a8:	00168693          	addi	a3,a3,1
-155 -- Insn --    101ac:	00251793          	slli	a5,a0,0x2
-156 -- Insn --    101b0:	00a78533          	add	a0,a5,a0
-157 -- Insn --    101b4:	00151513          	slli	a0,a0,0x1
-158 -- Insn --    101b8:	00e50533          	add	a0,a0,a4
-159 -- Insn --    101bc:	fd050513          	addi	a0,a0,-48
-160 -- Insn --    101c0:	0006c703          	lbu	a4,0(a3)
-161 -- Insn --    101c4:	fe0712e3          	bnez	a4,101a8 <str_to_uns+0x18>
-162 -- Insn --    101c8:	00008067          	ret
-163 -- Ukendt -- 
-164 -- Entry -- 000101cc <uns_to_str>:
-165 -- Insn --    101cc:	00050713          	mv	a4,a0
-166 -- Insn --    101d0:	00050693          	mv	a3,a0
-167 -- Insn --    101d4:	00a00513          	li	a0,10
-168 -- Insn --    101d8:	00900813          	li	a6,9
-169 -- Insn --    101dc:	04058863          	beqz	a1,1022c <uns_to_str+0x60>
-170 -- Insn --    101e0:	00068793          	mv	a5,a3
-171 -- Insn --    101e4:	00168693          	addi	a3,a3,1
-172 -- Insn --    101e8:	02a5f633          	remu	a2,a1,a0
-173 -- Insn --    101ec:	03060613          	addi	a2,a2,48
-174 -- Insn --    101f0:	fec68fa3          	sb	a2,-1(a3)
-175 -- Insn --    101f4:	00058613          	mv	a2,a1
-176 -- Insn --    101f8:	02a5d5b3          	divu	a1,a1,a0
-177 -- Insn --    101fc:	fec862e3          	bltu	a6,a2,101e0 <uns_to_str+0x14>
-178 -- Insn --    10200:	00068023          	sb	zero,0(a3)
-179 -- Insn --    10204:	40e78533          	sub	a0,a5,a4
-180 -- Insn --    10208:	02f77063          	bgeu	a4,a5,10228 <uns_to_str+0x5c>
-181 -- Insn --    1020c:	0007c683          	lbu	a3,0(a5)
-182 -- Insn --    10210:	00074603          	lbu	a2,0(a4)
-183 -- Insn --    10214:	00c78023          	sb	a2,0(a5)
-184 -- Insn --    10218:	00d70023          	sb	a3,0(a4)
-185 -- Insn --    1021c:	fff78793          	addi	a5,a5,-1
-186 -- Insn --    10220:	00170713          	addi	a4,a4,1
-187 -- Insn --    10224:	fef764e3          	bltu	a4,a5,1020c <uns_to_str+0x40>
-188 -- Insn --    10228:	00008067          	ret
-189 -- Insn --    1022c:	03000793          	li	a5,48
-190 -- Insn --    10230:	00f70023          	sb	a5,0(a4)
-191 -- Insn --    10234:	000700a3          	sb	zero,1(a4)
-192 -- Insn --    10238:	00100513          	li	a0,1
-193 -- Insn --    1023c:	00008067          	ret
+90 -- Entry -- 000100f0 <print_string>:
+91 -- Insn --    100f0:	0140006f          	j	10104 <print_string+0x14>
+92 -- Insn --    100f4:	00150513          	addi	a0,a0,1
+93 -- Insn --    100f8:	00200893          	li	a7,2
+94 -- Insn --    100fc:	00f00833          	add	a6,zero,a5
+95 -- Insn --    10100:	00000073          	ecall
+96 -- Insn --    10104:	00054783          	lbu	a5,0(a0)
+97 -- Insn --    10108:	fe0796e3          	bnez	a5,100f4 <print_string+0x4>
+98 -- Insn --    1010c:	00008067          	ret
+99 -- Ukendt -- 
+100 -- Entry -- 00010110 <read_string>:
+101 -- Insn --    10110:	00100893          	li	a7,1
+102 -- Insn --    10114:	00000073          	ecall
+103 -- Insn --    10118:	01100733          	add	a4,zero,a7
+104 -- Insn --    1011c:	00a00793          	li	a5,10
+105 -- Insn --    10120:	0ff77713          	andi	a4,a4,255
+106 -- Insn --    10124:	04f70663          	beq	a4,a5,10170 <read_string+0x60>
+107 -- Insn --    10128:	00d00793          	li	a5,13
+108 -- Insn --    1012c:	04f70263          	beq	a4,a5,10170 <read_string+0x60>
+109 -- Insn --    10130:	00100793          	li	a5,1
+110 -- Insn --    10134:	02b7de63          	bge	a5,a1,10170 <read_string+0x60>
+111 -- Insn --    10138:	fff58593          	addi	a1,a1,-1
+112 -- Insn --    1013c:	00b506b3          	add	a3,a0,a1
+113 -- Insn --    10140:	00070793          	mv	a5,a4
+114 -- Insn --    10144:	00a00613          	li	a2,10
+115 -- Insn --    10148:	00d00593          	li	a1,13
+116 -- Insn --    1014c:	00c0006f          	j	10158 <read_string+0x48>
+117 -- Insn --    10150:	02b78063          	beq	a5,a1,10170 <read_string+0x60>
+118 -- Insn --    10154:	00d50e63          	beq	a0,a3,10170 <read_string+0x60>
+119 -- Insn --    10158:	00150513          	addi	a0,a0,1
+120 -- Insn --    1015c:	fee50fa3          	sb	a4,-1(a0)
+121 -- Insn --    10160:	00100893          	li	a7,1
+122 -- Insn --    10164:	00000073          	ecall
+123 -- Insn --    10168:	00078713          	mv	a4,a5
+124 -- Insn --    1016c:	fec792e3          	bne	a5,a2,10150 <read_string+0x40>
+125 -- Insn --    10170:	00050023          	sb	zero,0(a0)
+126 -- Insn --    10174:	00008067          	ret
+127 -- Ukendt -- 
+128 -- Entry -- 00010178 <str_to_uns>:
+129 -- Insn --    10178:	00054783          	lbu	a5,0(a0)
+130 -- Insn --    1017c:	00154683          	lbu	a3,1(a0)
+131 -- Insn --    10180:	00150713          	addi	a4,a0,1
+132 -- Insn --    10184:	fd078513          	addi	a0,a5,-48
+133 -- Insn --    10188:	02068263          	beqz	a3,101ac <str_to_uns+0x34>
+134 -- Insn --    1018c:	00251793          	slli	a5,a0,0x2
+135 -- Insn --    10190:	00a78533          	add	a0,a5,a0
+136 -- Insn --    10194:	00170713          	addi	a4,a4,1
+137 -- Insn --    10198:	00151513          	slli	a0,a0,0x1
+138 -- Insn --    1019c:	00d50533          	add	a0,a0,a3
+139 -- Insn --    101a0:	00074683          	lbu	a3,0(a4)
+140 -- Insn --    101a4:	fd050513          	addi	a0,a0,-48
+141 -- Insn --    101a8:	fe0692e3          	bnez	a3,1018c <str_to_uns+0x14>
+142 -- Insn --    101ac:	00008067          	ret
+143 -- Ukendt -- 
+144 -- Entry -- 000101b0 <uns_to_str>:
+145 -- Insn --    101b0:	00050713          	mv	a4,a0
+146 -- Insn --    101b4:	00050613          	mv	a2,a0
+147 -- Insn --    101b8:	00900893          	li	a7,9
+148 -- Insn --    101bc:	00a00513          	li	a0,10
+149 -- Insn --    101c0:	04058a63          	beqz	a1,10214 <uns_to_str+0x64>
+150 -- Insn --    101c4:	02a5f6b3          	remu	a3,a1,a0
+151 -- Insn --    101c8:	00060793          	mv	a5,a2
+152 -- Insn --    101cc:	00160613          	addi	a2,a2,1
+153 -- Insn --    101d0:	00058813          	mv	a6,a1
+154 -- Insn --    101d4:	03068693          	addi	a3,a3,48
+155 -- Insn --    101d8:	fed60fa3          	sb	a3,-1(a2)
+156 -- Insn --    101dc:	02a5d5b3          	divu	a1,a1,a0
+157 -- Insn --    101e0:	ff08e2e3          	bltu	a7,a6,101c4 <uns_to_str+0x14>
+158 -- Insn --    101e4:	00060023          	sb	zero,0(a2)
+159 -- Insn --    101e8:	40e78533          	sub	a0,a5,a4
+160 -- Insn --    101ec:	00f76663          	bltu	a4,a5,101f8 <uns_to_str+0x48>
+161 -- Insn --    101f0:	0200006f          	j	10210 <uns_to_str+0x60>
+162 -- Insn --    101f4:	0007c683          	lbu	a3,0(a5)
+163 -- Insn --    101f8:	00074603          	lbu	a2,0(a4)
+164 -- Insn --    101fc:	00170713          	addi	a4,a4,1
+165 -- Insn --    10200:	fff78793          	addi	a5,a5,-1
+166 -- Insn --    10204:	00c780a3          	sb	a2,1(a5)
+167 -- Insn --    10208:	fed70fa3          	sb	a3,-1(a4)
+168 -- Insn --    1020c:	fef764e3          	bltu	a4,a5,101f4 <uns_to_str+0x44>
+169 -- Insn --    10210:	00008067          	ret
+170 -- Insn --    10214:	03000793          	li	a5,48
+171 -- Insn --    10218:	00f70023          	sb	a5,0(a4)
+172 -- Insn --    1021c:	000700a3          	sb	zero,1(a4)
+173 -- Insn --    10220:	00100513          	li	a0,1
+174 -- Insn --    10224:	00008067          	ret
 
 
 
 
  ITERATION LOG: 
 
-0      10094 :  1000137    LUI      sp = 16777216             R[ 2] <- 1000000
-1      10098 : fbdff0ef    JAL      pc = pc + -68            
-2   => 10054 : f7010113    ADDI     sp = sp + 3952            R[ 2] <- 1000f70
-3      10058 :  8112623    SW       M[16781308] = ra          R[ 2] <- 1000f70
-4      1005c :    10537    LUI      a0 = 65536                R[10] <- 10000
-5      10060 : 24050513    ADDI     a0 = a0 + 576             R[10] <- 10240
-6      10064 :  6c000ef    JAL      pc = pc + 108            
-7   => 100d0 : ff010113    ADDI     sp = sp + 4080            R[ 2] <- 1001f60
-8      100d4 :   112623    SW       M[16785260] = ra          R[ 2] <- 1001f60
-9      100d8 :   812423    SW       M[16785256] = s0          R[ 2] <- 1001f60
-10     100dc :    50413    ADDI     s0 = a0 + 0               R[ 8] <- 10240
-11     100e0 :    54503    LBU      a0,0(a0)                  R[10] <- 48
-12     100e4 :    50a63    BEQ      pc = pc                  
-13     100e8 :   140413    ADDI     s0 = s0 + 1               R[ 8] <- 10241
-14     100ec : fc9ff0ef    JAL      pc = pc + -56            
-15  => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-16     100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 48
-17     100bc :       73    ECALL    PRINT: H                 
-18     100c0 :     8067    JALR     pc = ra + 0              
-19  => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 65
-20     100f4 : fe051ae3    BNE      pc = pc + -12            
-21     100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 10242
-22     100ec : fc9ff0ef    JAL      pc = pc + -56            
-23  => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-24     100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 65
-25     100bc :       73    ECALL    PRINT: e                 
-26     100c0 :     8067    JALR     pc = ra + 0              
-27  => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 6a
-28     100f4 : fe051ae3    BNE      pc = pc + -12            
-29     100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 10243
-30     100ec : fc9ff0ef    JAL      pc = pc + -56            
-31  => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-32     100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 6a
-33     100bc :       73    ECALL    PRINT: j                 
-34     100c0 :     8067    JALR     pc = ra + 0              
-35  => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 20
-36     100f4 : fe051ae3    BNE      pc = pc + -12            
-37     100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 10244
-38     100ec : fc9ff0ef    JAL      pc = pc + -56            
-39  => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-40     100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 20
-41     100bc :       73    ECALL    PRINT:                   
-42     100c0 :     8067    JALR     pc = ra + 0              
-43  => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 6d
-44     100f4 : fe051ae3    BNE      pc = pc + -12            
-45     100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 10245
-46     100ec : fc9ff0ef    JAL      pc = pc + -56            
-47  => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-48     100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 6d
-49     100bc :       73    ECALL    PRINT: m                 
-50     100c0 :     8067    JALR     pc = ra + 0              
-51  => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 65
-52     100f4 : fe051ae3    BNE      pc = pc + -12            
-53     100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 10246
-54     100ec : fc9ff0ef    JAL      pc = pc + -56            
-55  => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-56     100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 65
-57     100bc :       73    ECALL    PRINT: e                 
-58     100c0 :     8067    JALR     pc = ra + 0              
-59  => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 64
-60     100f4 : fe051ae3    BNE      pc = pc + -12            
-61     100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 10247
-62     100ec : fc9ff0ef    JAL      pc = pc + -56            
-63  => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-64     100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 64
-65     100bc :       73    ECALL    PRINT: d                 
-66     100c0 :     8067    JALR     pc = ra + 0              
-67  => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 20
-68     100f4 : fe051ae3    BNE      pc = pc + -12            
-69     100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 10248
-70     100ec : fc9ff0ef    JAL      pc = pc + -56            
-71  => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-72     100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 20
-73     100bc :       73    ECALL    PRINT:                   
-74     100c0 :     8067    JALR     pc = ra + 0              
-75  => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 64
-76     100f4 : fe051ae3    BNE      pc = pc + -12            
-77     100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 10249
-78     100ec : fc9ff0ef    JAL      pc = pc + -56            
-79  => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-80     100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 64
-81     100bc :       73    ECALL    PRINT: d                 
-82     100c0 :     8067    JALR     pc = ra + 0              
-83  => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 69
-84     100f4 : fe051ae3    BNE      pc = pc + -12            
-85     100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 1024a
-86     100ec : fc9ff0ef    JAL      pc = pc + -56            
-87  => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-88     100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 69
-89     100bc :       73    ECALL    PRINT: i                 
-90     100c0 :     8067    JALR     pc = ra + 0              
-91  => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 67
-92     100f4 : fe051ae3    BNE      pc = pc + -12            
-93     100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 1024b
-94     100ec : fc9ff0ef    JAL      pc = pc + -56            
-95  => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-96     100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 67
-97     100bc :       73    ECALL    PRINT: g                 
-98     100c0 :     8067    JALR     pc = ra + 0              
-99  => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 20
-100    100f4 : fe051ae3    BNE      pc = pc + -12            
-101    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 1024c
-102    100ec : fc9ff0ef    JAL      pc = pc + -56            
-103 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-104    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 20
-105    100bc :       73    ECALL    PRINT:                   
-106    100c0 :     8067    JALR     pc = ra + 0              
-107 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 2d
-108    100f4 : fe051ae3    BNE      pc = pc + -12            
-109    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 1024d
-110    100ec : fc9ff0ef    JAL      pc = pc + -56            
-111 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-112    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 2d
-113    100bc :       73    ECALL    PRINT: -                 
-114    100c0 :     8067    JALR     pc = ra + 0              
-115 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 20
-116    100f4 : fe051ae3    BNE      pc = pc + -12            
-117    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 1024e
-118    100ec : fc9ff0ef    JAL      pc = pc + -56            
-119 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-120    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 20
-121    100bc :       73    ECALL    PRINT:                   
-122    100c0 :     8067    JALR     pc = ra + 0              
-123 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 73
-124    100f4 : fe051ae3    BNE      pc = pc + -12            
-125    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 1024f
-126    100ec : fc9ff0ef    JAL      pc = pc + -56            
-127 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-128    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 73
-129    100bc :       73    ECALL    PRINT: s                 
-130    100c0 :     8067    JALR     pc = ra + 0              
-131 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 6b
-132    100f4 : fe051ae3    BNE      pc = pc + -12            
-133    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 10250
-134    100ec : fc9ff0ef    JAL      pc = pc + -56            
-135 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-136    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 6b
-137    100bc :       73    ECALL    PRINT: k                 
-138    100c0 :     8067    JALR     pc = ra + 0              
-139 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 72
-140    100f4 : fe051ae3    BNE      pc = pc + -12            
-141    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 10251
-142    100ec : fc9ff0ef    JAL      pc = pc + -56            
-143 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-144    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 72
-145    100bc :       73    ECALL    PRINT: r                 
-146    100c0 :     8067    JALR     pc = ra + 0              
-147 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 69
-148    100f4 : fe051ae3    BNE      pc = pc + -12            
-149    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 10252
-150    100ec : fc9ff0ef    JAL      pc = pc + -56            
-151 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-152    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 69
-153    100bc :       73    ECALL    PRINT: i                 
-154    100c0 :     8067    JALR     pc = ra + 0              
-155 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 76
-156    100f4 : fe051ae3    BNE      pc = pc + -12            
-157    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 10253
-158    100ec : fc9ff0ef    JAL      pc = pc + -56            
-159 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-160    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 76
-161    100bc :       73    ECALL    PRINT: v                 
-162    100c0 :     8067    JALR     pc = ra + 0              
-163 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 20
-164    100f4 : fe051ae3    BNE      pc = pc + -12            
-165    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 10254
-166    100ec : fc9ff0ef    JAL      pc = pc + -56            
-167 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-168    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 20
-169    100bc :       73    ECALL    PRINT:                   
-170    100c0 :     8067    JALR     pc = ra + 0              
-171 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 6e
-172    100f4 : fe051ae3    BNE      pc = pc + -12            
-173    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 10255
-174    100ec : fc9ff0ef    JAL      pc = pc + -56            
-175 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-176    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 6e
-177    100bc :       73    ECALL    PRINT: n                 
-178    100c0 :     8067    JALR     pc = ra + 0              
-179 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 6f
-180    100f4 : fe051ae3    BNE      pc = pc + -12            
-181    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 10256
-182    100ec : fc9ff0ef    JAL      pc = pc + -56            
-183 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-184    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 6f
-185    100bc :       73    ECALL    PRINT: o                 
-186    100c0 :     8067    JALR     pc = ra + 0              
-187 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 67
-188    100f4 : fe051ae3    BNE      pc = pc + -12            
-189    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 10257
-190    100ec : fc9ff0ef    JAL      pc = pc + -56            
-191 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-192    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 67
-193    100bc :       73    ECALL    PRINT: g                 
-194    100c0 :     8067    JALR     pc = ra + 0              
-195 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 65
-196    100f4 : fe051ae3    BNE      pc = pc + -12            
-197    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 10258
-198    100ec : fc9ff0ef    JAL      pc = pc + -56            
-199 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-200    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 65
-201    100bc :       73    ECALL    PRINT: e                 
-202    100c0 :     8067    JALR     pc = ra + 0              
-203 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 74
-204    100f4 : fe051ae3    BNE      pc = pc + -12            
-205    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 10259
-206    100ec : fc9ff0ef    JAL      pc = pc + -56            
-207 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-208    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 74
-209    100bc :       73    ECALL    PRINT: t                 
-210    100c0 :     8067    JALR     pc = ra + 0              
-211 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 2c
-212    100f4 : fe051ae3    BNE      pc = pc + -12            
-213    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 1025a
-214    100ec : fc9ff0ef    JAL      pc = pc + -56            
-215 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-216    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 2c
-217    100bc :       73    ECALL    PRINT: ,                 
-218    100c0 :     8067    JALR     pc = ra + 0              
-219 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 20
-220    100f4 : fe051ae3    BNE      pc = pc + -12            
-221    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 1025b
-222    100ec : fc9ff0ef    JAL      pc = pc + -56            
-223 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-224    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 20
-225    100bc :       73    ECALL    PRINT:                   
-226    100c0 :     8067    JALR     pc = ra + 0              
-227 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 73
-228    100f4 : fe051ae3    BNE      pc = pc + -12            
-229    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 1025c
-230    100ec : fc9ff0ef    JAL      pc = pc + -56            
-231 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-232    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 73
-233    100bc :       73    ECALL    PRINT: s                 
-234    100c0 :     8067    JALR     pc = ra + 0              
-235 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 61
-236    100f4 : fe051ae3    BNE      pc = pc + -12            
-237    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 1025d
-238    100ec : fc9ff0ef    JAL      pc = pc + -56            
-239 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-240    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 61
-241    100bc :       73    ECALL    PRINT: a                 
-242    100c0 :     8067    JALR     pc = ra + 0              
-243 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 61
-244    100f4 : fe051ae3    BNE      pc = pc + -12            
-245    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 1025e
-246    100ec : fc9ff0ef    JAL      pc = pc + -56            
-247 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-248    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 61
-249    100bc :       73    ECALL    PRINT: a                 
-250    100c0 :     8067    JALR     pc = ra + 0              
-251 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 20
-252    100f4 : fe051ae3    BNE      pc = pc + -12            
-253    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 1025f
-254    100ec : fc9ff0ef    JAL      pc = pc + -56            
-255 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-256    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 20
-257    100bc :       73    ECALL    PRINT:                   
-258    100c0 :     8067    JALR     pc = ra + 0              
-259 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 62
-260    100f4 : fe051ae3    BNE      pc = pc + -12            
-261    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 10260
-262    100ec : fc9ff0ef    JAL      pc = pc + -56            
-263 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-264    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 62
-265    100bc :       73    ECALL    PRINT: b                 
-266    100c0 :     8067    JALR     pc = ra + 0              
-267 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 6c
-268    100f4 : fe051ae3    BNE      pc = pc + -12            
-269    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 10261
-270    100ec : fc9ff0ef    JAL      pc = pc + -56            
-271 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-272    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 6c
-273    100bc :       73    ECALL    PRINT: l                 
-274    100c0 :     8067    JALR     pc = ra + 0              
-275 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 69
-276    100f4 : fe051ae3    BNE      pc = pc + -12            
-277    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 10262
-278    100ec : fc9ff0ef    JAL      pc = pc + -56            
-279 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-280    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 69
-281    100bc :       73    ECALL    PRINT: i                 
-282    100c0 :     8067    JALR     pc = ra + 0              
-283 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 76
-284    100f4 : fe051ae3    BNE      pc = pc + -12            
-285    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 10263
-286    100ec : fc9ff0ef    JAL      pc = pc + -56            
-287 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-288    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 76
-289    100bc :       73    ECALL    PRINT: v                 
-290    100c0 :     8067    JALR     pc = ra + 0              
-291 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 65
-292    100f4 : fe051ae3    BNE      pc = pc + -12            
-293    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 10264
-294    100ec : fc9ff0ef    JAL      pc = pc + -56            
-295 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-296    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 65
-297    100bc :       73    ECALL    PRINT: e                 
-298    100c0 :     8067    JALR     pc = ra + 0              
-299 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 72
-300    100f4 : fe051ae3    BNE      pc = pc + -12            
-301    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 10265
-302    100ec : fc9ff0ef    JAL      pc = pc + -56            
-303 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-304    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 72
-305    100bc :       73    ECALL    PRINT: r                 
-306    100c0 :     8067    JALR     pc = ra + 0              
-307 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 20
-308    100f4 : fe051ae3    BNE      pc = pc + -12            
-309    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 10266
-310    100ec : fc9ff0ef    JAL      pc = pc + -56            
-311 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-312    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 20
-313    100bc :       73    ECALL    PRINT:                   
-314    100c0 :     8067    JALR     pc = ra + 0              
-315 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 6a
-316    100f4 : fe051ae3    BNE      pc = pc + -12            
-317    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 10267
-318    100ec : fc9ff0ef    JAL      pc = pc + -56            
-319 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-320    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 6a
-321    100bc :       73    ECALL    PRINT: j                 
-322    100c0 :     8067    JALR     pc = ra + 0              
-323 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 65
-324    100f4 : fe051ae3    BNE      pc = pc + -12            
-325    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 10268
-326    100ec : fc9ff0ef    JAL      pc = pc + -56            
-327 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-328    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 65
-329    100bc :       73    ECALL    PRINT: e                 
-330    100c0 :     8067    JALR     pc = ra + 0              
-331 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 67
-332    100f4 : fe051ae3    BNE      pc = pc + -12            
-333    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 10269
-334    100ec : fc9ff0ef    JAL      pc = pc + -56            
-335 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-336    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 67
-337    100bc :       73    ECALL    PRINT: g                 
-338    100c0 :     8067    JALR     pc = ra + 0              
-339 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 20
-340    100f4 : fe051ae3    BNE      pc = pc + -12            
-341    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 1026a
-342    100ec : fc9ff0ef    JAL      pc = pc + -56            
-343 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-344    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 20
-345    100bc :       73    ECALL    PRINT:                   
-346    100c0 :     8067    JALR     pc = ra + 0              
-347 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 67
-348    100f4 : fe051ae3    BNE      pc = pc + -12            
-349    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 1026b
-350    100ec : fc9ff0ef    JAL      pc = pc + -56            
-351 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-352    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 67
-353    100bc :       73    ECALL    PRINT: g                 
-354    100c0 :     8067    JALR     pc = ra + 0              
-355 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 6c
-356    100f4 : fe051ae3    BNE      pc = pc + -12            
-357    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 1026c
-358    100ec : fc9ff0ef    JAL      pc = pc + -56            
-359 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-360    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 6c
-361    100bc :       73    ECALL    PRINT: l                 
-362    100c0 :     8067    JALR     pc = ra + 0              
-363 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 61
-364    100f4 : fe051ae3    BNE      pc = pc + -12            
-365    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 1026d
-366    100ec : fc9ff0ef    JAL      pc = pc + -56            
-367 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-368    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 61
-369    100bc :       73    ECALL    PRINT: a                 
-370    100c0 :     8067    JALR     pc = ra + 0              
-371 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 64
-372    100f4 : fe051ae3    BNE      pc = pc + -12            
-373    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 1026e
-374    100ec : fc9ff0ef    JAL      pc = pc + -56            
-375 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-376    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 64
-377    100bc :       73    ECALL    PRINT: d                 
-378    100c0 :     8067    JALR     pc = ra + 0              
-379 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 3a
-380    100f4 : fe051ae3    BNE      pc = pc + -12            
-381    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 1026f
-382    100ec : fc9ff0ef    JAL      pc = pc + -56            
-383 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-384    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 3a
-385    100bc :       73    ECALL    PRINT: :                 
-386    100c0 :     8067    JALR     pc = ra + 0              
-387 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 20
-388    100f4 : fe051ae3    BNE      pc = pc + -12            
-389    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 10270
-390    100ec : fc9ff0ef    JAL      pc = pc + -56            
-391 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-392    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 20
-393    100bc :       73    ECALL    PRINT:                   
-394    100c0 :     8067    JALR     pc = ra + 0              
-395 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 0
-396    100f4 : fe051ae3    BNE      pc = pc                  
-397    100f8 :   c12083    LW       ra,12(sp)                 R[ 1] <- 10068
-398    100fc :   812403    LW       s0,8(sp)                  R[ 8] <- 0
-399    10100 :  1010113    ADDI     sp = sp + 16              R[ 2] <- 1001f70
-400    10104 :     8067    JALR     pc = ra + 0              
-401 => 10068 :  8000593    ADDI     a1 = zero + 128           R[11] <- 80
-402    1006c :    10513    ADDI     a0 = sp + 0               R[10] <- 1001f70
-403    10070 :  98000ef    JAL      pc = pc + 152            
-404 => 10108 : fe010113    ADDI     sp = sp + 4064            R[ 2] <- 1002f50
-405    1010c :   112e23    SW       M[16789356] = ra          R[ 2] <- 1002f50
-406    10110 :   812c23    SW       M[16789352] = s0          R[ 2] <- 1002f50
-407    10114 :   912a23    SW       M[16789348] = s1          R[ 2] <- 1002f50
-408    10118 :  1212823    SW       M[16789344] = s2          R[ 2] <- 1002f50
-409    1011c :  1312623    SW       M[16789340] = s3          R[ 2] <- 1002f50
-410    10120 :    50413    ADDI     s0 = a0 + 0               R[ 8] <- 1001f70
-411    10124 :    58493    ADDI     s1 = a1 + 0               R[ 9] <- 80
-412    10128 : f79ff0ef    JAL      pc = pc + -136           
-413 => 100a0 :   100893    ADDI     a7 = zero + 1             R[17] <- 1
-414    100a4 :       73    ECALL    a7 = 49                  
-415    100a8 :  1100533    ADD      a0 = zero + a7            R[10] <- 31
-416    100ac :  ff57513    ANDI     a0 & a0 + 255             R[10] <- 31
-417    100b0 :     8067    JALR     pc = ra + 0              
-418 => 1012c :   a00793    ADDI     a5 = zero + 10            R[15] <- a
-419    10130 :  4f50063    BEQ      pc = pc                  
-420    10134 :   d00793    ADDI     a5 = zero + 13            R[15] <- d
-421    10138 :  2f50c63    BEQ      pc = pc                  
-422    1013c :   100793    ADDI     a5 = zero + 1             R[15] <- 1
-423    10140 :  297d863    BGE      pc = pc                  
-424    10144 : fff48493    ADDI     s1 = s1 + 4095            R[ 9] <- 107f
-425    10148 :   9404b3    ADD      s1 = s0 + s1              R[ 9] <- 1002fef
-426    1014c :   a00913    ADDI     s2 = zero + 10            R[18] <- a
-427    10150 :   d00993    ADDI     s3 = zero + 13            R[19] <- d
-428    10154 :   140413    ADDI     s0 = s0 + 1               R[ 8] <- 1001f71
-429    10158 : fea40fa3    SB       M[16916336] = a0          R[ 8] <- 1001f71
-430    1015c : f45ff0ef    JAL      pc = pc + -188           
-431 => 100a0 :   100893    ADDI     a7 = zero + 1             R[17] <- 1
-432    100a4 :       73    ECALL    a7 = 10                  
-433    100a8 :  1100533    ADD      a0 = zero + a7            R[10] <- a
-434    100ac :  ff57513    ANDI     a0 & a0 + 255             R[10] <- a
-435    100b0 :     8067    JALR     pc = ra + 0              
-436 => 10160 :  1250863    BEQ      pc = pc + 16             
-437    10170 :    40023    SB       M[16785265] = zero   {T}  R[ 0] <- 0
-438    10174 :  1c12083    LW       ra,28(sp)                 R[ 1] <- 10074
-439    10178 :  1812403    LW       s0,24(sp)                 R[ 8] <- 0
-440    1017c :  1412483    LW       s1,20(sp)                 R[ 9] <- 0
-441    10180 :  1012903    LW       s2,16(sp)                 R[18] <- 0
-442    10184 :   c12983    LW       s3,12(sp)                 R[19] <- 0
-443    10188 :  2010113    ADDI     sp = sp + 32              R[ 2] <- 1002f70
-444    1018c :     8067    JALR     pc = ra + 0              
-445 => 10074 :    10537    LUI      a0 = 65536                R[10] <- 10000
-446    10078 : 27450513    ADDI     a0 = a0 + 628             R[10] <- 10274
-447    1007c :  54000ef    JAL      pc = pc + 84             
-448 => 100d0 : ff010113    ADDI     sp = sp + 4080            R[ 2] <- 1003f60
-449    100d4 :   112623    SW       M[16793452] = ra          R[ 2] <- 1003f60
-450    100d8 :   812423    SW       M[16793448] = s0          R[ 2] <- 1003f60
-451    100dc :    50413    ADDI     s0 = a0 + 0               R[ 8] <- 10274
-452    100e0 :    54503    LBU      a0,0(a0)                  R[10] <- 44
-453    100e4 :    50a63    BEQ      pc = pc                  
-454    100e8 :   140413    ADDI     s0 = s0 + 1               R[ 8] <- 10275
-455    100ec : fc9ff0ef    JAL      pc = pc + -56            
-456 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-457    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 44
-458    100bc :       73    ECALL    PRINT: D                 
-459    100c0 :     8067    JALR     pc = ra + 0              
-460 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 75
-461    100f4 : fe051ae3    BNE      pc = pc + -12            
-462    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 10276
-463    100ec : fc9ff0ef    JAL      pc = pc + -56            
-464 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-465    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 75
-466    100bc :       73    ECALL    PRINT: u                 
-467    100c0 :     8067    JALR     pc = ra + 0              
-468 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 20
-469    100f4 : fe051ae3    BNE      pc = pc + -12            
-470    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 10277
-471    100ec : fc9ff0ef    JAL      pc = pc + -56            
-472 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-473    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 20
-474    100bc :       73    ECALL    PRINT:                   
-475    100c0 :     8067    JALR     pc = ra + 0              
-476 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 73
-477    100f4 : fe051ae3    BNE      pc = pc + -12            
-478    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 10278
-479    100ec : fc9ff0ef    JAL      pc = pc + -56            
-480 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-481    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 73
-482    100bc :       73    ECALL    PRINT: s                 
-483    100c0 :     8067    JALR     pc = ra + 0              
-484 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 6b
-485    100f4 : fe051ae3    BNE      pc = pc + -12            
-486    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 10279
-487    100ec : fc9ff0ef    JAL      pc = pc + -56            
-488 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-489    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 6b
-490    100bc :       73    ECALL    PRINT: k                 
-491    100c0 :     8067    JALR     pc = ra + 0              
-492 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 72
-493    100f4 : fe051ae3    BNE      pc = pc + -12            
-494    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 1027a
-495    100ec : fc9ff0ef    JAL      pc = pc + -56            
-496 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-497    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 72
-498    100bc :       73    ECALL    PRINT: r                 
-499    100c0 :     8067    JALR     pc = ra + 0              
-500 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 65
-501    100f4 : fe051ae3    BNE      pc = pc + -12            
-502    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 1027b
-503    100ec : fc9ff0ef    JAL      pc = pc + -56            
-504 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-505    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 65
-506    100bc :       73    ECALL    PRINT: e                 
-507    100c0 :     8067    JALR     pc = ra + 0              
-508 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 76
-509    100f4 : fe051ae3    BNE      pc = pc + -12            
-510    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 1027c
-511    100ec : fc9ff0ef    JAL      pc = pc + -56            
-512 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-513    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 76
-514    100bc :       73    ECALL    PRINT: v                 
-515    100c0 :     8067    JALR     pc = ra + 0              
-516 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 3a
-517    100f4 : fe051ae3    BNE      pc = pc + -12            
-518    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 1027d
-519    100ec : fc9ff0ef    JAL      pc = pc + -56            
-520 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-521    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 3a
-522    100bc :       73    ECALL    PRINT: :                 
-523    100c0 :     8067    JALR     pc = ra + 0              
-524 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 20
-525    100f4 : fe051ae3    BNE      pc = pc + -12            
-526    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 1027e
-527    100ec : fc9ff0ef    JAL      pc = pc + -56            
-528 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-529    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 20
-530    100bc :       73    ECALL    PRINT:                   
-531    100c0 :     8067    JALR     pc = ra + 0              
-532 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 0
-533    100f4 : fe051ae3    BNE      pc = pc                  
-534    100f8 :   c12083    LW       ra,12(sp)                 R[ 1] <- 10080
-535    100fc :   812403    LW       s0,8(sp)                  R[ 8] <- 0
-536    10100 :  1010113    ADDI     sp = sp + 16              R[ 2] <- 1003f70
-537    10104 :     8067    JALR     pc = ra + 0              
-538 => 10080 :    10513    ADDI     a0 = sp + 0               R[10] <- 1003f70
-539    10084 :  4c000ef    JAL      pc = pc + 76             
-540 => 100d0 : ff010113    ADDI     sp = sp + 4080            R[ 2] <- 1004f60
-541    100d4 :   112623    SW       M[16797548] = ra          R[ 2] <- 1004f60
-542    100d8 :   812423    SW       M[16797544] = s0          R[ 2] <- 1004f60
-543    100dc :    50413    ADDI     s0 = a0 + 0               R[ 8] <- 1003f70
-544    100e0 :    54503    LBU      a0,0(a0)                  R[10] <- 0
-545    100e4 :    50a63    BEQ      pc = pc + 20             
-546    100f8 :   c12083    LW       ra,12(sp)            {T}  R[ 1] <- 10088
-547    100fc :   812403    LW       s0,8(sp)                  R[ 8] <- 0
-548    10100 :  1010113    ADDI     sp = sp + 16              R[ 2] <- 1004f70
-549    10104 :     8067    JALR     pc = ra + 0              
-550 => 10088 :  8c12083    LW       ra,140(sp)                R[ 1] <- 0
-551    1008c :  9010113    ADDI     sp = sp + 144             R[ 2] <- 1005000
-552    10090 :     8067    JALR     pc = ra + 0              
-555 =>     8 :  1007663    BGEU     pc = pc                  
-16958    10054 : f7010113    ADDI     sp = sp + 3952            R[ 2] <- 1005f70
-16959    10058 :  8112623    SW       M[16801788] = ra          R[ 2] <- 1005f70
-16960    1005c :    10537    LUI      a0 = 65536                R[10] <- 10000
-16961    10060 : 24050513    ADDI     a0 = a0 + 576             R[10] <- 10240
-16962    10064 :  6c000ef    JAL      pc = pc + 108            
-16963 => 100d0 : ff010113    ADDI     sp = sp + 4080            R[ 2] <- 1006f60
-16964    100d4 :   112623    SW       M[16805740] = ra          R[ 2] <- 1006f60
-16965    100d8 :   812423    SW       M[16805736] = s0          R[ 2] <- 1006f60
-16966    100dc :    50413    ADDI     s0 = a0 + 0               R[ 8] <- 10240
-16967    100e0 :    54503    LBU      a0,0(a0)                  R[10] <- 48
-16968    100e4 :    50a63    BEQ      pc = pc                  
-16969    100e8 :   140413    ADDI     s0 = s0 + 1               R[ 8] <- 10241
-16970    100ec : fc9ff0ef    JAL      pc = pc + -56            
-16971 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-16972    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 48
-16973    100bc :       73    ECALL    PRINT: H                 
-16974    100c0 :     8067    JALR     pc = ra + 0              
-16975 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 65
-16976    100f4 : fe051ae3    BNE      pc = pc + -12            
-16977    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 10242
-16978    100ec : fc9ff0ef    JAL      pc = pc + -56            
-16979 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-16980    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 65
-16981    100bc :       73    ECALL    PRINT: e                 
-16982    100c0 :     8067    JALR     pc = ra + 0              
-16983 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 6a
-16984    100f4 : fe051ae3    BNE      pc = pc + -12            
-16985    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 10243
-16986    100ec : fc9ff0ef    JAL      pc = pc + -56            
-16987 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-16988    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 6a
-16989    100bc :       73    ECALL    PRINT: j                 
-16990    100c0 :     8067    JALR     pc = ra + 0              
-16991 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 20
-16992    100f4 : fe051ae3    BNE      pc = pc + -12            
-16993    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 10244
-16994    100ec : fc9ff0ef    JAL      pc = pc + -56            
-16995 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-16996    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 20
-16997    100bc :       73    ECALL    PRINT:                   
-16998    100c0 :     8067    JALR     pc = ra + 0              
-16999 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 6d
-17000    100f4 : fe051ae3    BNE      pc = pc + -12            
-17001    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 10245
-17002    100ec : fc9ff0ef    JAL      pc = pc + -56            
-17003 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-17004    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 6d
-17005    100bc :       73    ECALL    PRINT: m                 
-17006    100c0 :     8067    JALR     pc = ra + 0              
-17007 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 65
-17008    100f4 : fe051ae3    BNE      pc = pc + -12            
-17009    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 10246
-17010    100ec : fc9ff0ef    JAL      pc = pc + -56            
-17011 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-17012    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 65
-17013    100bc :       73    ECALL    PRINT: e                 
-17014    100c0 :     8067    JALR     pc = ra + 0              
-17015 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 64
-17016    100f4 : fe051ae3    BNE      pc = pc + -12            
-17017    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 10247
-17018    100ec : fc9ff0ef    JAL      pc = pc + -56            
-17019 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-17020    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 64
-17021    100bc :       73    ECALL    PRINT: d                 
-17022    100c0 :     8067    JALR     pc = ra + 0              
-17023 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 20
-17024    100f4 : fe051ae3    BNE      pc = pc + -12            
-17025    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 10248
-17026    100ec : fc9ff0ef    JAL      pc = pc + -56            
-17027 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-17028    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 20
-17029    100bc :       73    ECALL    PRINT:                   
-17030    100c0 :     8067    JALR     pc = ra + 0              
-17031 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 64
-17032    100f4 : fe051ae3    BNE      pc = pc + -12            
-17033    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 10249
-17034    100ec : fc9ff0ef    JAL      pc = pc + -56            
-17035 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-17036    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 64
-17037    100bc :       73    ECALL    PRINT: d                 
-17038    100c0 :     8067    JALR     pc = ra + 0              
-17039 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 69
-17040    100f4 : fe051ae3    BNE      pc = pc + -12            
-17041    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 1024a
-17042    100ec : fc9ff0ef    JAL      pc = pc + -56            
-17043 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-17044    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 69
-17045    100bc :       73    ECALL    PRINT: i                 
-17046    100c0 :     8067    JALR     pc = ra + 0              
-17047 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 67
-17048    100f4 : fe051ae3    BNE      pc = pc + -12            
-17049    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 1024b
-17050    100ec : fc9ff0ef    JAL      pc = pc + -56            
-17051 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-17052    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 67
-17053    100bc :       73    ECALL    PRINT: g                 
-17054    100c0 :     8067    JALR     pc = ra + 0              
-17055 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 20
-17056    100f4 : fe051ae3    BNE      pc = pc + -12            
-17057    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 1024c
-17058    100ec : fc9ff0ef    JAL      pc = pc + -56            
-17059 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-17060    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 20
-17061    100bc :       73    ECALL    PRINT:                   
-17062    100c0 :     8067    JALR     pc = ra + 0              
-17063 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 2d
-17064    100f4 : fe051ae3    BNE      pc = pc + -12            
-17065    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 1024d
-17066    100ec : fc9ff0ef    JAL      pc = pc + -56            
-17067 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-17068    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 2d
-17069    100bc :       73    ECALL    PRINT: -                 
-17070    100c0 :     8067    JALR     pc = ra + 0              
-17071 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 20
-17072    100f4 : fe051ae3    BNE      pc = pc + -12            
-17073    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 1024e
-17074    100ec : fc9ff0ef    JAL      pc = pc + -56            
-17075 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-17076    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 20
-17077    100bc :       73    ECALL    PRINT:                   
-17078    100c0 :     8067    JALR     pc = ra + 0              
-17079 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 73
-17080    100f4 : fe051ae3    BNE      pc = pc + -12            
-17081    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 1024f
-17082    100ec : fc9ff0ef    JAL      pc = pc + -56            
-17083 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-17084    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 73
-17085    100bc :       73    ECALL    PRINT: s                 
-17086    100c0 :     8067    JALR     pc = ra + 0              
-17087 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 6b
-17088    100f4 : fe051ae3    BNE      pc = pc + -12            
-17089    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 10250
-17090    100ec : fc9ff0ef    JAL      pc = pc + -56            
-17091 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-17092    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 6b
-17093    100bc :       73    ECALL    PRINT: k                 
-17094    100c0 :     8067    JALR     pc = ra + 0              
-17095 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 72
-17096    100f4 : fe051ae3    BNE      pc = pc + -12            
-17097    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 10251
-17098    100ec : fc9ff0ef    JAL      pc = pc + -56            
-17099 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-17100    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 72
-17101    100bc :       73    ECALL    PRINT: r                 
-17102    100c0 :     8067    JALR     pc = ra + 0              
-17103 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 69
-17104    100f4 : fe051ae3    BNE      pc = pc + -12            
-17105    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 10252
-17106    100ec : fc9ff0ef    JAL      pc = pc + -56            
-17107 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-17108    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 69
-17109    100bc :       73    ECALL    PRINT: i                 
-17110    100c0 :     8067    JALR     pc = ra + 0              
-17111 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 76
-17112    100f4 : fe051ae3    BNE      pc = pc + -12            
-17113    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 10253
-17114    100ec : fc9ff0ef    JAL      pc = pc + -56            
-17115 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-17116    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 76
-17117    100bc :       73    ECALL    PRINT: v                 
-17118    100c0 :     8067    JALR     pc = ra + 0              
-17119 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 20
-17120    100f4 : fe051ae3    BNE      pc = pc + -12            
-17121    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 10254
-17122    100ec : fc9ff0ef    JAL      pc = pc + -56            
-17123 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-17124    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 20
-17125    100bc :       73    ECALL    PRINT:                   
-17126    100c0 :     8067    JALR     pc = ra + 0              
-17127 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 6e
-17128    100f4 : fe051ae3    BNE      pc = pc + -12            
-17129    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 10255
-17130    100ec : fc9ff0ef    JAL      pc = pc + -56            
-17131 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-17132    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 6e
-17133    100bc :       73    ECALL    PRINT: n                 
-17134    100c0 :     8067    JALR     pc = ra + 0              
-17135 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 6f
-17136    100f4 : fe051ae3    BNE      pc = pc + -12            
-17137    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 10256
-17138    100ec : fc9ff0ef    JAL      pc = pc + -56            
-17139 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-17140    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 6f
-17141    100bc :       73    ECALL    PRINT: o                 
-17142    100c0 :     8067    JALR     pc = ra + 0              
-17143 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 67
-17144    100f4 : fe051ae3    BNE      pc = pc + -12            
-17145    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 10257
-17146    100ec : fc9ff0ef    JAL      pc = pc + -56            
-17147 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-17148    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 67
-17149    100bc :       73    ECALL    PRINT: g                 
-17150    100c0 :     8067    JALR     pc = ra + 0              
-17151 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 65
-17152    100f4 : fe051ae3    BNE      pc = pc + -12            
-17153    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 10258
-17154    100ec : fc9ff0ef    JAL      pc = pc + -56            
-17155 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-17156    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 65
-17157    100bc :       73    ECALL    PRINT: e                 
-17158    100c0 :     8067    JALR     pc = ra + 0              
-17159 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 74
-17160    100f4 : fe051ae3    BNE      pc = pc + -12            
-17161    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 10259
-17162    100ec : fc9ff0ef    JAL      pc = pc + -56            
-17163 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-17164    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 74
-17165    100bc :       73    ECALL    PRINT: t                 
-17166    100c0 :     8067    JALR     pc = ra + 0              
-17167 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 2c
-17168    100f4 : fe051ae3    BNE      pc = pc + -12            
-17169    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 1025a
-17170    100ec : fc9ff0ef    JAL      pc = pc + -56            
-17171 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-17172    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 2c
-17173    100bc :       73    ECALL    PRINT: ,                 
-17174    100c0 :     8067    JALR     pc = ra + 0              
-17175 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 20
-17176    100f4 : fe051ae3    BNE      pc = pc + -12            
-17177    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 1025b
-17178    100ec : fc9ff0ef    JAL      pc = pc + -56            
-17179 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-17180    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 20
-17181    100bc :       73    ECALL    PRINT:                   
-17182    100c0 :     8067    JALR     pc = ra + 0              
-17183 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 73
-17184    100f4 : fe051ae3    BNE      pc = pc + -12            
-17185    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 1025c
-17186    100ec : fc9ff0ef    JAL      pc = pc + -56            
-17187 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-17188    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 73
-17189    100bc :       73    ECALL    PRINT: s                 
-17190    100c0 :     8067    JALR     pc = ra + 0              
-17191 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 61
-17192    100f4 : fe051ae3    BNE      pc = pc + -12            
-17193    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 1025d
-17194    100ec : fc9ff0ef    JAL      pc = pc + -56            
-17195 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-17196    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 61
-17197    100bc :       73    ECALL    PRINT: a                 
-17198    100c0 :     8067    JALR     pc = ra + 0              
-17199 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 61
-17200    100f4 : fe051ae3    BNE      pc = pc + -12            
-17201    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 1025e
-17202    100ec : fc9ff0ef    JAL      pc = pc + -56            
-17203 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-17204    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 61
-17205    100bc :       73    ECALL    PRINT: a                 
-17206    100c0 :     8067    JALR     pc = ra + 0              
-17207 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 20
-17208    100f4 : fe051ae3    BNE      pc = pc + -12            
-17209    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 1025f
-17210    100ec : fc9ff0ef    JAL      pc = pc + -56            
-17211 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-17212    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 20
-17213    100bc :       73    ECALL    PRINT:                   
-17214    100c0 :     8067    JALR     pc = ra + 0              
-17215 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 62
-17216    100f4 : fe051ae3    BNE      pc = pc + -12            
-17217    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 10260
-17218    100ec : fc9ff0ef    JAL      pc = pc + -56            
-17219 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-17220    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 62
-17221    100bc :       73    ECALL    PRINT: b                 
-17222    100c0 :     8067    JALR     pc = ra + 0              
-17223 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 6c
-17224    100f4 : fe051ae3    BNE      pc = pc + -12            
-17225    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 10261
-17226    100ec : fc9ff0ef    JAL      pc = pc + -56            
-17227 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-17228    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 6c
-17229    100bc :       73    ECALL    PRINT: l                 
-17230    100c0 :     8067    JALR     pc = ra + 0              
-17231 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 69
-17232    100f4 : fe051ae3    BNE      pc = pc + -12            
-17233    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 10262
-17234    100ec : fc9ff0ef    JAL      pc = pc + -56            
-17235 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-17236    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 69
-17237    100bc :       73    ECALL    PRINT: i                 
-17238    100c0 :     8067    JALR     pc = ra + 0              
-17239 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 76
-17240    100f4 : fe051ae3    BNE      pc = pc + -12            
-17241    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 10263
-17242    100ec : fc9ff0ef    JAL      pc = pc + -56            
-17243 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-17244    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 76
-17245    100bc :       73    ECALL    PRINT: v                 
-17246    100c0 :     8067    JALR     pc = ra + 0              
-17247 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 65
-17248    100f4 : fe051ae3    BNE      pc = pc + -12            
-17249    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 10264
-17250    100ec : fc9ff0ef    JAL      pc = pc + -56            
-17251 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-17252    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 65
-17253    100bc :       73    ECALL    PRINT: e                 
-17254    100c0 :     8067    JALR     pc = ra + 0              
-17255 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 72
-17256    100f4 : fe051ae3    BNE      pc = pc + -12            
-17257    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 10265
-17258    100ec : fc9ff0ef    JAL      pc = pc + -56            
-17259 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-17260    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 72
-17261    100bc :       73    ECALL    PRINT: r                 
-17262    100c0 :     8067    JALR     pc = ra + 0              
-17263 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 20
-17264    100f4 : fe051ae3    BNE      pc = pc + -12            
-17265    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 10266
-17266    100ec : fc9ff0ef    JAL      pc = pc + -56            
-17267 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-17268    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 20
-17269    100bc :       73    ECALL    PRINT:                   
-17270    100c0 :     8067    JALR     pc = ra + 0              
-17271 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 6a
-17272    100f4 : fe051ae3    BNE      pc = pc + -12            
-17273    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 10267
-17274    100ec : fc9ff0ef    JAL      pc = pc + -56            
-17275 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-17276    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 6a
-17277    100bc :       73    ECALL    PRINT: j                 
-17278    100c0 :     8067    JALR     pc = ra + 0              
-17279 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 65
-17280    100f4 : fe051ae3    BNE      pc = pc + -12            
-17281    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 10268
-17282    100ec : fc9ff0ef    JAL      pc = pc + -56            
-17283 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-17284    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 65
-17285    100bc :       73    ECALL    PRINT: e                 
-17286    100c0 :     8067    JALR     pc = ra + 0              
-17287 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 67
-17288    100f4 : fe051ae3    BNE      pc = pc + -12            
-17289    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 10269
-17290    100ec : fc9ff0ef    JAL      pc = pc + -56            
-17291 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-17292    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 67
-17293    100bc :       73    ECALL    PRINT: g                 
-17294    100c0 :     8067    JALR     pc = ra + 0              
-17295 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 20
-17296    100f4 : fe051ae3    BNE      pc = pc + -12            
-17297    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 1026a
-17298    100ec : fc9ff0ef    JAL      pc = pc + -56            
-17299 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-17300    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 20
-17301    100bc :       73    ECALL    PRINT:                   
-17302    100c0 :     8067    JALR     pc = ra + 0              
-17303 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 67
-17304    100f4 : fe051ae3    BNE      pc = pc + -12            
-17305    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 1026b
-17306    100ec : fc9ff0ef    JAL      pc = pc + -56            
-17307 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-17308    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 67
-17309    100bc :       73    ECALL    PRINT: g                 
-17310    100c0 :     8067    JALR     pc = ra + 0              
-17311 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 6c
-17312    100f4 : fe051ae3    BNE      pc = pc + -12            
-17313    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 1026c
-17314    100ec : fc9ff0ef    JAL      pc = pc + -56            
-17315 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-17316    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 6c
-17317    100bc :       73    ECALL    PRINT: l                 
-17318    100c0 :     8067    JALR     pc = ra + 0              
-17319 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 61
-17320    100f4 : fe051ae3    BNE      pc = pc + -12            
-17321    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 1026d
-17322    100ec : fc9ff0ef    JAL      pc = pc + -56            
-17323 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-17324    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 61
-17325    100bc :       73    ECALL    PRINT: a                 
-17326    100c0 :     8067    JALR     pc = ra + 0              
-17327 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 64
-17328    100f4 : fe051ae3    BNE      pc = pc + -12            
-17329    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 1026e
-17330    100ec : fc9ff0ef    JAL      pc = pc + -56            
-17331 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-17332    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 64
-17333    100bc :       73    ECALL    PRINT: d                 
-17334    100c0 :     8067    JALR     pc = ra + 0              
-17335 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 3a
-17336    100f4 : fe051ae3    BNE      pc = pc + -12            
-17337    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 1026f
-17338    100ec : fc9ff0ef    JAL      pc = pc + -56            
-17339 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-17340    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 3a
-17341    100bc :       73    ECALL    PRINT: :                 
-17342    100c0 :     8067    JALR     pc = ra + 0              
-17343 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 20
-17344    100f4 : fe051ae3    BNE      pc = pc + -12            
-17345    100e8 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 10270
-17346    100ec : fc9ff0ef    JAL      pc = pc + -56            
-17347 => 100b4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
-17348    100b8 :   a00833    ADD      a6 = zero + a0            R[16] <- 20
-17349    100bc :       73    ECALL    PRINT:                   
-17350    100c0 :     8067    JALR     pc = ra + 0              
-17351 => 100f0 :    44503    LBU      a0,0(s0)                  R[10] <- 0
-17352    100f4 : fe051ae3    BNE      pc = pc                  
-17353    100f8 :   c12083    LW       ra,12(sp)                 R[ 1] <- 10068
-17354    100fc :   812403    LW       s0,8(sp)                  R[ 8] <- 0
-17355    10100 :  1010113    ADDI     sp = sp + 16              R[ 2] <- 1006f70
-17356    10104 :     8067    JALR     pc = ra + 0              
-17357 => 10068 :  8000593    ADDI     a1 = zero + 128           R[11] <- 80
-17358    1006c :    10513    ADDI     a0 = sp + 0               R[10] <- 1006f70
-17359    10070 :  98000ef    JAL      pc = pc + 152            
-17360 => 10108 : fe010113    ADDI     sp = sp + 4064            R[ 2] <- 1007f50
-17361    1010c :   112e23    SW       M[16809836] = ra          R[ 2] <- 1007f50
-17362    10110 :   812c23    SW       M[16809832] = s0          R[ 2] <- 1007f50
-17363    10114 :   912a23    SW       M[16809828] = s1          R[ 2] <- 1007f50
-17364    10118 :  1212823    SW       M[16809824] = s2          R[ 2] <- 1007f50
-17365    1011c :  1312623    SW       M[16809820] = s3          R[ 2] <- 1007f50
-17366    10120 :    50413    ADDI     s0 = a0 + 0               R[ 8] <- 1006f70
-17367    10124 :    58493    ADDI     s1 = a1 + 0               R[ 9] <- 80
-17368    10128 : f79ff0ef    JAL      pc = pc + -136           
-17369 => 100a0 :   100893    ADDI     a7 = zero + 1             R[17] <- 1
+0      100b4 :  1000137    LUI      sp = 16777216             R[ 2] <- 1000000
+1      100b8 : fbdff0ef    JAL      pc = pc + -68            
+2   => 10074 : ff010113    ADDI     sp = sp + 4080            R[ 2] <- 1000ff0
+3      10078 :   812423    SW       M[16781304] = s0          R[ 2] <- 1000ff0
+4      1007c :    11437    LUI      s0 = 69632                R[ 8] <- 11000
+5      10080 : 22844503    LBU      a0,552(s0)                R[10] <- 48
+6      10084 :   112623    SW       M[16781308] = ra          R[10] <- 48
+7      10088 :    50c63    BEQ      pc = pc                  
+8      1008c : 22840413    ADDI     s0 = s0 + 552             R[ 8] <- 11228
+9      10090 :   140413    ADDI     s0 = s0 + 1               R[ 8] <- 11229
+10     10094 :  40000ef    JAL      pc = pc + 64             
+11  => 100d4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
+12     100d8 :   a00833    ADD      a6 = zero + a0            R[16] <- 48
+13     100dc :       73    ECALL    PRINT: H                 
+14     100e0 :     8067    JALR     pc = ra + 0              
+15  => 10098 :    44503    LBU      a0,0(s0)                  R[10] <- 65
+16     1009c : fe051ae3    BNE      pc = pc + -12            
+17     10090 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 1122a
+18     10094 :  40000ef    JAL      pc = pc + 64             
+19  => 100d4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
+20     100d8 :   a00833    ADD      a6 = zero + a0            R[16] <- 65
+21     100dc :       73    ECALL    PRINT: e                 
+22     100e0 :     8067    JALR     pc = ra + 0              
+23  => 10098 :    44503    LBU      a0,0(s0)                  R[10] <- 6c
+24     1009c : fe051ae3    BNE      pc = pc + -12            
+25     10090 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 1122b
+26     10094 :  40000ef    JAL      pc = pc + 64             
+27  => 100d4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
+28     100d8 :   a00833    ADD      a6 = zero + a0            R[16] <- 6c
+29     100dc :       73    ECALL    PRINT: l                 
+30     100e0 :     8067    JALR     pc = ra + 0              
+31  => 10098 :    44503    LBU      a0,0(s0)                  R[10] <- 6c
+32     1009c : fe051ae3    BNE      pc = pc + -12            
+33     10090 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 1122c
+34     10094 :  40000ef    JAL      pc = pc + 64             
+35  => 100d4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
+36     100d8 :   a00833    ADD      a6 = zero + a0            R[16] <- 6c
+37     100dc :       73    ECALL    PRINT: l                 
+38     100e0 :     8067    JALR     pc = ra + 0              
+39  => 10098 :    44503    LBU      a0,0(s0)                  R[10] <- 6f
+40     1009c : fe051ae3    BNE      pc = pc + -12            
+41     10090 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 1122d
+42     10094 :  40000ef    JAL      pc = pc + 64             
+43  => 100d4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
+44     100d8 :   a00833    ADD      a6 = zero + a0            R[16] <- 6f
+45     100dc :       73    ECALL    PRINT: o                 
+46     100e0 :     8067    JALR     pc = ra + 0              
+47  => 10098 :    44503    LBU      a0,0(s0)                  R[10] <- 20
+48     1009c : fe051ae3    BNE      pc = pc + -12            
+49     10090 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 1122e
+50     10094 :  40000ef    JAL      pc = pc + 64             
+51  => 100d4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
+52     100d8 :   a00833    ADD      a6 = zero + a0            R[16] <- 20
+53     100dc :       73    ECALL    PRINT:                   
+54     100e0 :     8067    JALR     pc = ra + 0              
+55  => 10098 :    44503    LBU      a0,0(s0)                  R[10] <- 66
+56     1009c : fe051ae3    BNE      pc = pc + -12            
+57     10090 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 1122f
+58     10094 :  40000ef    JAL      pc = pc + 64             
+59  => 100d4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
+60     100d8 :   a00833    ADD      a6 = zero + a0            R[16] <- 66
+61     100dc :       73    ECALL    PRINT: f                 
+62     100e0 :     8067    JALR     pc = ra + 0              
+63  => 10098 :    44503    LBU      a0,0(s0)                  R[10] <- 72
+64     1009c : fe051ae3    BNE      pc = pc + -12            
+65     10090 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 11230
+66     10094 :  40000ef    JAL      pc = pc + 64             
+67  => 100d4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
+68     100d8 :   a00833    ADD      a6 = zero + a0            R[16] <- 72
+69     100dc :       73    ECALL    PRINT: r                 
+70     100e0 :     8067    JALR     pc = ra + 0              
+71  => 10098 :    44503    LBU      a0,0(s0)                  R[10] <- 6f
+72     1009c : fe051ae3    BNE      pc = pc + -12            
+73     10090 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 11231
+74     10094 :  40000ef    JAL      pc = pc + 64             
+75  => 100d4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
+76     100d8 :   a00833    ADD      a6 = zero + a0            R[16] <- 6f
+77     100dc :       73    ECALL    PRINT: o                 
+78     100e0 :     8067    JALR     pc = ra + 0              
+79  => 10098 :    44503    LBU      a0,0(s0)                  R[10] <- 6d
+80     1009c : fe051ae3    BNE      pc = pc + -12            
+81     10090 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 11232
+82     10094 :  40000ef    JAL      pc = pc + 64             
+83  => 100d4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
+84     100d8 :   a00833    ADD      a6 = zero + a0            R[16] <- 6d
+85     100dc :       73    ECALL    PRINT: m                 
+86     100e0 :     8067    JALR     pc = ra + 0              
+87  => 10098 :    44503    LBU      a0,0(s0)                  R[10] <- 20
+88     1009c : fe051ae3    BNE      pc = pc + -12            
+89     10090 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 11233
+90     10094 :  40000ef    JAL      pc = pc + 64             
+91  => 100d4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
+92     100d8 :   a00833    ADD      a6 = zero + a0            R[16] <- 20
+93     100dc :       73    ECALL    PRINT:                   
+94     100e0 :     8067    JALR     pc = ra + 0              
+95  => 10098 :    44503    LBU      a0,0(s0)                  R[10] <- 52
+96     1009c : fe051ae3    BNE      pc = pc + -12            
+97     10090 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 11234
+98     10094 :  40000ef    JAL      pc = pc + 64             
+99  => 100d4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
+100    100d8 :   a00833    ADD      a6 = zero + a0            R[16] <- 52
+101    100dc :       73    ECALL    PRINT: R                 
+102    100e0 :     8067    JALR     pc = ra + 0              
+103 => 10098 :    44503    LBU      a0,0(s0)                  R[10] <- 49
+104    1009c : fe051ae3    BNE      pc = pc + -12            
+105    10090 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 11235
+106    10094 :  40000ef    JAL      pc = pc + 64             
+107 => 100d4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
+108    100d8 :   a00833    ADD      a6 = zero + a0            R[16] <- 49
+109    100dc :       73    ECALL    PRINT: I                 
+110    100e0 :     8067    JALR     pc = ra + 0              
+111 => 10098 :    44503    LBU      a0,0(s0)                  R[10] <- 53
+112    1009c : fe051ae3    BNE      pc = pc + -12            
+113    10090 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 11236
+114    10094 :  40000ef    JAL      pc = pc + 64             
+115 => 100d4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
+116    100d8 :   a00833    ADD      a6 = zero + a0            R[16] <- 53
+117    100dc :       73    ECALL    PRINT: S                 
+118    100e0 :     8067    JALR     pc = ra + 0              
+119 => 10098 :    44503    LBU      a0,0(s0)                  R[10] <- 43
+120    1009c : fe051ae3    BNE      pc = pc + -12            
+121    10090 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 11237
+122    10094 :  40000ef    JAL      pc = pc + 64             
+123 => 100d4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
+124    100d8 :   a00833    ADD      a6 = zero + a0            R[16] <- 43
+125    100dc :       73    ECALL    PRINT: C                 
+126    100e0 :     8067    JALR     pc = ra + 0              
+127 => 10098 :    44503    LBU      a0,0(s0)                  R[10] <- 2d
+128    1009c : fe051ae3    BNE      pc = pc + -12            
+129    10090 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 11238
+130    10094 :  40000ef    JAL      pc = pc + 64             
+131 => 100d4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
+132    100d8 :   a00833    ADD      a6 = zero + a0            R[16] <- 2d
+133    100dc :       73    ECALL    PRINT: -                 
+134    100e0 :     8067    JALR     pc = ra + 0              
+135 => 10098 :    44503    LBU      a0,0(s0)                  R[10] <- 56
+136    1009c : fe051ae3    BNE      pc = pc + -12            
+137    10090 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 11239
+138    10094 :  40000ef    JAL      pc = pc + 64             
+139 => 100d4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
+140    100d8 :   a00833    ADD      a6 = zero + a0            R[16] <- 56
+141    100dc :       73    ECALL    PRINT: V                 
+142    100e0 :     8067    JALR     pc = ra + 0              
+143 => 10098 :    44503    LBU      a0,0(s0)                  R[10] <- a
+144    1009c : fe051ae3    BNE      pc = pc + -12            
+145    10090 :   140413    ADDI     s0 = s0 + 1          {T}  R[ 8] <- 1123a
+146    10094 :  40000ef    JAL      pc = pc + 64             
+147 => 100d4 :   200893    ADDI     a7 = zero + 2             R[17] <- 2
+148    100d8 :   a00833    ADD      a6 = zero + a0            R[16] <- a
+149    100dc :       73    ECALL    PRINT: \n                
+150    100e0 :     8067    JALR     pc = ra + 0              
+151 => 10098 :    44503    LBU      a0,0(s0)                  R[10] <- 0
+152    1009c : fe051ae3    BNE      pc = pc                  
+153    100a0 :   c12083    LW       ra,12(sp)                 R[ 1] <- 100bc
+154    100a4 :   812403    LW       s0,8(sp)                  R[ 8] <- 0
+155    100a8 :      513    ADDI     a0 = zero + 0             R[10] <- 0
+156    100ac :  1010113    ADDI     sp = sp + 16              R[ 2] <- 1001000
+157    100b0 :     8067    JALR     pc = ra + 0              
+158 => 100bc :  28000ef    JAL      pc = pc + 40             
+159 => 100e4 :   300893    ADDI     a7 = zero + 3             R[17] <- 3
+160    100e8 :       73    ECALL    EXIT                     
+
+Simulated 161 instructions in 948 ticks (0.169831 MIPS)
